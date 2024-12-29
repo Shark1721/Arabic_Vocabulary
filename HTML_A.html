@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Quiz</title>
+    <!-- Link to your external CSS file -->
+    <link rel="stylesheet" href="CSS_A.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Language Quiz</h1>
+        
+        <!-- Input Section -->
+        <div class="input-section">
+            <h2>Enter English and Arabic Words</h2>
+            <textarea id="englishWords" placeholder="Enter English words, one per line."></textarea>
+            <textarea id="arabicWords" placeholder="Enter Arabic words, one per line."></textarea>
+
+            <h3>Choose if you want to see the correct answer immediately:</h3>
+            <label>
+                <input type="radio" name="answerOption" value="immediate" checked> Show immediately
+            </label>
+            <label>
+                <input type="radio" name="answerOption" value="end"> Show at the end
+            </label>
+
+            <button onclick="startQuiz()">Start Quiz</button>
+        </div>
+
+        <!-- Quiz Section -->
+        <div class="quiz-section" style="display: none;">
+            <h2 id="question"></h2>
+            <input type="text" id="answer" placeholder="Enter your answer" />
+            <button onclick="checkAnswer()">Submit Answer</button>
+            <p id="feedback"></p>
+            <p>Score: <span id="score">0</span> / <span id="totalQuestions">0</span></p>
+            <p>Question: <span id="currentQuestionNumber">1</span> / <span id="totalQuestionsCount">0</span></p>
+        </div>
+
+        <!-- Result Section -->
+        <div class="result-section" style="display: none;">
+            <h2>Quiz Finished!</h2>
+            <p>Your total score is: <span id="finalScore"></span> / <span id="totalQuestionsResult"></span></p>
+            <h3>Your answers:</h3>
+            <ul id="answerList"></ul>
+            <button onclick="resetQuiz()">Restart Quiz</button>
+        </div>
+    </div>
+
+    <!-- Link to your external JS file -->
+    <script src="quiz.js"></script>
+</body>
+</html>
