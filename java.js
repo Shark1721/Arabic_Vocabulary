@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Start quiz button listener
     startQuizBtn.addEventListener("click", () => {
-        console.log('Start quiz button clicked');  // Debugging log
+        console.log('Start quiz button clicked'); // Debugging log
 
         // Grab input words and check length
         englishWords = englishInput.value.trim().split("\n");
@@ -43,9 +43,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Submit answer button listener
     submitAnswer.addEventListener("click", (event) => {
-        event.preventDefault();  // Prevent page reload
-        console.log('Submit answer button clicked');  // Debugging log
-        
+        event.preventDefault(); // Prevent page reload
+        console.log('Submit answer button clicked'); // Debugging log
+
         const userInput = userAnswer.value.trim();
         const isCorrect = (currentDirection === "en-ar")
             ? userInput === arabicWords[currentQuestionIndex]
@@ -73,12 +73,12 @@ document.addEventListener("DOMContentLoaded", () => {
         resultSection.classList.add("hidden");
         englishInput.value = "";
         arabicInput.value = "";
-        console.log('Restart quiz button clicked');  // Debugging log
+        console.log('Restart quiz button clicked'); // Debugging log
     });
 
     function showNextQuestion() {
-        quizFeedback.textContent = "";
-        currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en";
+        quizFeedback.textContent = ""; // Clear previous feedback
+        currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en"; // Random direction (English to Arabic or vice versa)
         quizQuestion.textContent = currentDirection === "en-ar"
             ? `Translate to Arabic: ${englishWords[currentQuestionIndex]}`
             : `Translate to English: ${arabicWords[currentQuestionIndex]}`;
@@ -90,4 +90,4 @@ document.addEventListener("DOMContentLoaded", () => {
         resultSection.classList.remove("hidden");
         finalScore.textContent = `${score} / ${englishWords.length}`;
     }
-}); // This closing bracket correctly ends the DOMContentLoaded event listener
+});
