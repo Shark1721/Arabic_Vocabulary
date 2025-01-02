@@ -47,11 +47,12 @@ document.addEventListener("DOMContentLoaded", () => {
             ? userInput === arabicWords[currentQuestionIndex]
             : userInput === englishWords[currentQuestionIndex];
 
-        if (isCorrect) {
-            score++;
-            quizFeedback.textContent = "Correct!";
-        } else {
-            quizFeedback.textContent = "Incorrect!";
+        if (feedbackOption === "immediate") {
+            if (isCorrect) {
+                quizFeedback.textContent = "Correct!";
+            } else {
+                quizFeedback.textContent = "Incorrect!";
+            }
         }
 
         currentQuestionIndex++;
@@ -72,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function showNextQuestion() {
-        quizFeedback.textContent = ""; // Clear feedback
+        quizFeedback.textContent = ""; // Clear previous feedback
 
         currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en";
         quizQuestion.textContent = currentDirection === "en-ar"
