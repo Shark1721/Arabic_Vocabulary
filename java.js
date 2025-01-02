@@ -82,4 +82,4 @@ document.addEventListener("DOMContentLoaded", () => {
         resultSection.classList.remove("hidden");
         finalScore.textContent = `${score} / ${englishWords.length}`;
     }
-});
+});  // <-- This closing brace correctly closes the DOMContentLoaded listener
