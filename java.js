@@ -19,21 +19,19 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentQuestionIndex = 0;
     let score = 0;
     let currentDirection;
-    let feedbackMode = "immediate";
     let incorrectAnswers = [];
+    let feedbackMode = "immediate";
 
-    // Start quiz button listener
     startQuizBtn.addEventListener("click", () => {
-        feedbackMode = feedbackModeSelect.value; // Set feedback mode
         englishWords = englishInput.value.trim().split("\n");
         arabicWords = arabicInput.value.trim().split("\n");
+        feedbackMode = feedbackModeSelect.value;
 
         if (englishWords.length !== arabicWords.length) {
             alert("English and Arabic word lists must have the same length!");
             return;
         }
 
-        // Hide setup and show quiz
         setupSection.classList.add("hidden");
         quizSection.classList.remove("hidden");
 
@@ -43,31 +41,27 @@ document.addEventListener("DOMContentLoaded", () => {
         showNextQuestion();
     });
 
-    // Submit answer listener
     submitAnswer.addEventListener("click", (event) => {
         event.preventDefault();
+
         const userInput = userAnswer.value.trim();
         const isCorrect = (currentDirection === "en-ar")
             ? userInput === arabicWords[currentQuestionIndex]
             : userInput === englishWords[currentQuestionIndex];
 
-        if (feedbackMode === "immediate") {
-            quizFeedback.textContent = isCorrect
-                ? "Correct!"
-                : `Incorrect! Correct answer: ${(currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex]}`;
-        }
-
-        if (!isCorrect && feedbackMode === "end") {
-            incorrectAnswers.push({
-                question: currentDirection === "en-ar" 
-                    ? `Translate to Arabic: ${englishWords[currentQuestionIndex]}` 
-                    : `Translate to English: ${arabicWords[currentQuestionIndex]}`,
-                correctAnswer: (currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex],
-            });
-        }
-
         if (isCorrect) {
             score++;
+            if (feedbackMode === "immediate") {
+                quizFeedback.textContent = "Correct!";
+            }
+        } else {
+            if (feedbackMode === "immediate") {
+                quizFeedback.textContent = `Incorrect! Correct answer: ${(currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex]}`;
+            }
+            incorrectAnswers.push({
+                question: quizQuestion.textContent,
+                correctAnswer: (currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex],
+            });
         }
 
         currentQuestionIndex++;
@@ -78,7 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Restart button listener
     restartQuiz.addEventListener("click", () => {
         setupSection.classList.remove("hidden");
         quizSection.classList.add("hidden");
@@ -99,15 +92,15 @@ document.addEventListener("DOMContentLoaded", () => {
     function finishQuiz() {
         quizSection.classList.add("hidden");
         resultSection.classList.remove("hidden");
-        finalScore.textContent = `${score} / ${englishWords.length}`;
-        incorrectAnswersList.innerHTML = "";
 
-        if (feedbackMode === "end" && incorrectAnswers.length > 0) {
-            incorrectAnswers.forEach(({ question, correctAnswer }) => {
-                const listItem = document.createElement("li");
-                listItem.textContent = `${question} - Correct answer: ${correctAnswer}`;
-                incorrectAnswersList.appendChild(listItem);
-            });
+        finalScore.textContent = `${score} / ${englishWords.length}`;
+
+        if (feedbackMode === "end") {
+            incorrectAnswersList.innerHTML = incorrectAnswers
+                .map(item => `<li>${item.question} - Correct Answer: ${item.correctAnswer}</li>`)
+                .join("");
+        } else {
+            incorrectAnswersList.innerHTML = "";
         }
     }
 });
