@@ -19,7 +19,8 @@ body {
     display: none;
 }
 
-textarea, input[type="text"] {
+/* Disable resize for specific textareas */
+#englishWords, #arabicWords {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
