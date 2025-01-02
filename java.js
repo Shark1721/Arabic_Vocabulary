@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
             score++;
             quizFeedback.textContent = "Correct!";
         } else {
-            quizFeedback.textContent = `Incorrect! Correct answer: ${(currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex]}`;
+            quizFeedback.textContent = "Incorrect!";
         }
 
         currentQuestionIndex++;
@@ -90,4 +90,4 @@ document.addEventListener("DOMContentLoaded", () => {
         resultSection.classList.remove("hidden");
         finalScore.textContent = `${score} / ${englishWords.length}`;
     }
-}); // This closing bracket correctly ends the DOMContentLoaded event listener
+});
