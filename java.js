@@ -1,3 +1,5 @@
+console.log("Script is working!");
+
 document.addEventListener("DOMContentLoaded", () => {
     const englishInput = document.getElementById("englishWords");
     const arabicInput = document.getElementById("arabicWords");
@@ -16,7 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let arabicWords = [];
     let currentQuestionIndex = 0;
     let score = 0;
-    let currentDirection;
 
     startQuizBtn.addEventListener("click", () => {
         englishWords = englishInput.value.trim().split("\n");
@@ -35,9 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
         showNextQuestion();
     });
 
-    submitAnswer.addEventListener("click", (event) => {
-        event.preventDefault(); // Prevent form submission or page reload
-
+    submitAnswer.addEventListener("click", () => {
         const userInput = userAnswer.value.trim();
         const isCorrect = (currentDirection === "en-ar")
             ? userInput === arabicWords[currentQuestionIndex]
@@ -46,10 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (isCorrect) {
             score++;
             quizFeedback.textContent = "Correct!";
-            quizFeedback.style.color = "green";
         } else {
             quizFeedback.textContent = `Incorrect! Correct answer: ${(currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex]}`;
-            quizFeedback.style.color = "red";
         }
 
         currentQuestionIndex++;
@@ -68,6 +65,8 @@ document.addEventListener("DOMContentLoaded", () => {
         arabicInput.value = "";
     });
 
+    let currentDirection;
+
     function showNextQuestion() {
         quizFeedback.textContent = "";
         currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en";
@@ -82,4 +81,4 @@ document.addEventListener("DOMContentLoaded", () => {
         resultSection.classList.remove("hidden");
         finalScore.textContent = `${score} / ${englishWords.length}`;
     }
-});  // <-- This closing brace correctly closes the DOMContentLoaded listener
+});
