@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Language Quiz</h1>
+        <!-- Setup Section -->
+        <div id="setup-section">
+            <h2>Enter Words</h2>
+            <textarea id="englishWords" placeholder="English words, one per line"></textarea>
+            <textarea id="arabicWords" placeholder="Arabic words, one per line"></textarea>
+            <button id="startQuiz">Start Quiz</button>
+        </div>
+        <!-- Quiz Section -->
+        <div id="quiz-section" class="hidden">
+            <h2 id="quiz-question"></h2>
+            <input type="text" id="userAnswer" placeholder="Your answer here">
+            <button id="submitAnswer">Submit</button>
+            <p id="quiz-feedback"></p>
+        </div>
+        <!-- Result Section -->
+        <div id="result-section" class="hidden">
+            <h2>Quiz Complete!</h2>
+            <p>Your score is: <span id="finalScore"></span></p>
+            <button id="restartQuiz">Restart Quiz</button>
+        </div>
+    </div>
+    <!-- Link to the JavaScript file -->
+    <script src="java.js" defer></script>
+</body>
+</html>
