@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">  
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,4 +20,17 @@
         <div id="quiz-section" class="hidden">
             <h2 id="quiz-question"></h2>
             <input type="text" id="userAnswer" placeholder="Your answer here">
-            <button id="s
+            <button id="submitAnswer">Submit</button>
+            <p id="quiz-feedback"></p>
+        </div>
+        <!-- Result Section -->
+        <div id="result-section" class="hidden">
+            <h2>Quiz Complete!</h2>
+            <p>Your score is: <span id="finalScore"></span></p>
+            <button id="restartQuiz">Restart Quiz</button>
+        </div>
+    </div>
+    <!-- Link to the JavaScript file -->
+    <script src="java.js" defer></script>
+</body>
+</html>
