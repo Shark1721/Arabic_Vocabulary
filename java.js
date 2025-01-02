@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
             incorrectAnswersList.innerHTML = incorrectAnswers
                 .map(item => `<li>${item.question} - Correct Answer: ${item.correctAnswer}</li>`)
                 .join("");
-        } else {
+        } else if (feedbackMode === "none") {
             incorrectAnswersList.innerHTML = "";
         }
     }
