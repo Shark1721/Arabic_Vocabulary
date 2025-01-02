@@ -9,6 +9,7 @@
 <body>
     <div class="container">
         <h1>Language Quiz</h1>
+
         <!-- Setup Section -->
         <div id="setup-section">
             <h2>Enter Words</h2>
@@ -22,18 +23,19 @@
             </select>
             <button id="startQuiz">Start Quiz</button>
         </div>
+
         <!-- Quiz Section -->
         <div id="quiz-section" class="hidden">
             <h2 id="quiz-question"></h2>
             <input type="text" id="userAnswer" placeholder="Your answer here">
             <button id="submitAnswer">Submit</button>
-            <p id="quiz-feedback"></p>
+            <p id="quiz-feedback"></p> <!-- This is where feedback will appear -->
         </div>
+
         <!-- Result Section -->
         <div id="result-section" class="hidden">
             <h2>Quiz Complete!</h2>
             <p>Your score is: <span id="finalScore"></span></p>
-            <ul id="incorrect-answers"></ul>
             <button id="restartQuiz">Restart Quiz</button>
         </div>
     </div>
