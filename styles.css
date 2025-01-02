@@ -13,22 +13,18 @@ body {
     background: white;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;  /* Center align text and child elements */
 }
 
 .hidden {
     display: none;
 }
 
-/* Center the textareas */
-#englishWords, #arabicWords {
+textarea, input[type="text"] {
     width: 100%;
-    max-width: 400px;  /* Limit the width */
     padding: 10px;
-    margin: 10px auto;  /* Center horizontally */
+    margin: 10px 0;
     border: 1px solid #ddd;
     border-radius: 5px;
-    resize: none !important; /* Disable resizing */
 }
 
 button {
