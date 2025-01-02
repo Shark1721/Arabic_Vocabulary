@@ -55,10 +55,12 @@ document.addEventListener("DOMContentLoaded", () => {
             score++;
             if (feedbackMode === "immediate") {
                 quizFeedback.textContent = "Correct!";
+                quizFeedback.style.color = "green"; // Show positive feedback
             }
         } else {
             if (feedbackMode === "immediate") {
                 quizFeedback.textContent = `Incorrect! Correct answer: ${(currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex]}`;
+                quizFeedback.style.color = "red"; // Show negative feedback
             }
             incorrectAnswers.push({
                 question: quizQuestion.textContent,
@@ -66,12 +68,16 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        currentQuestionIndex++;
-        if (currentQuestionIndex >= englishWords.length) {
-            finishQuiz();
-        } else {
-            showNextQuestion();
-        }
+        // Delay to allow user to see feedback
+        setTimeout(() => {
+            quizFeedback.textContent = ""; // Clear feedback
+            currentQuestionIndex++;
+            if (currentQuestionIndex >= englishWords.length) {
+                finishQuiz();
+            } else {
+                showNextQuestion();
+            }
+        }, 1000); // 1-second delay
     });
 
     // Restart quiz button listener
@@ -84,8 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function showNextQuestion() {
-        quizFeedback.textContent = "";
-        currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en";
+        quizFeedback.textContent = ""; // Clear previous feedback
+        currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en"; // Random direction (English to Arabic or vice versa)
         quizQuestion.textContent = currentDirection === "en-ar"
             ? `Translate to Arabic: ${englishWords[currentQuestionIndex]}`
             : `Translate to English: ${arabicWords[currentQuestionIndex]}`;
