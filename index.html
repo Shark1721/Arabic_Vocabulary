@@ -9,18 +9,19 @@
 <body>
     <div class="container">
         <h1>Language Quiz</h1>
-
         <!-- Setup Section -->
         <div id="setup-section">
             <h2>Enter Words</h2>
             <textarea id="englishWords" placeholder="English words, one per line"></textarea>
             <textarea id="arabicWords" placeholder="Arabic words, one per line"></textarea>
-            <label for="feedbackMode">Choose Feedback Mode:</label>
-            <select id="feedbackMode">
+
+            <label for="feedbackOption">Select Feedback Option:</label>
+            <select id="feedbackOption">
                 <option value="immediate">Immediate Feedback</option>
-                <option value="end">Feedback at End</option>
+                <option value="end">In the End</option>
                 <option value="none">No Feedback</option>
             </select>
+
             <button id="startQuiz">Start Quiz</button>
         </div>
 
@@ -36,7 +37,6 @@
         <div id="result-section" class="hidden">
             <h2>Quiz Complete!</h2>
             <p>Your score is: <span id="finalScore"></span></p>
-            <p id="quiz-feedback"></p> <!-- Final feedback will appear here -->
             <button id="restartQuiz">Restart Quiz</button>
         </div>
     </div>
