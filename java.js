@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const englishInput = document.getElementById("englishWords");
     const arabicInput = document.getElementById("arabicWords");
+    const feedbackOption = document.getElementById("feedbackOption");
     const startQuizBtn = document.getElementById("startQuiz");
     const quizSection = document.getElementById("quiz-section");
     const setupSection = document.getElementById("setup-section");
@@ -14,9 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let englishWords = [];
     let arabicWords = [];
+    let feedbackList = [];
     let currentQuestionIndex = 0;
     let score = 0;
     let currentDirection;
+    let feedbackMode;
 
     // Start quiz button listener
     startQuizBtn.addEventListener("click", () => {
@@ -25,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Grab input words and check length
         englishWords = englishInput.value.trim().split("\n");
         arabicWords = arabicInput.value.trim().split("\n");
+        feedbackMode = feedbackOption.value;
 
         if (englishWords.length !== arabicWords.length) {
             alert("English and Arabic word lists must have the same length!");
@@ -38,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Reset quiz
         score = 0;
         currentQuestionIndex = 0;
+        feedbackList = [];
         showNextQuestion();
     });
 
@@ -53,9 +58,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (isCorrect) {
             score++;
-            quizFeedback.textContent = "Correct!";
+            if (feedbackMode === "immediate") {
+                quizFeedback.textContent = "Correct!";
+            }
         } else {
-            quizFeedback.textContent = `Incorrect! Correct answer: ${(currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex]}`;
+            const correctAnswer = (currentDirection === "en-ar") 
+                ? arabicWords[currentQuestionIndex] 
+                : englishWords[currentQuestionIndex];
+            
+            if (feedbackMode === "immediate") {
+                quizFeedback.textContent = `Incorrect! Correct answer: ${correctAnswer}`;
+            }
+            feedbackList.push({
+                question: quizQuestion.textContent,
+                userAnswer: userInput,
+                correctAnswer: correctAnswer
+            });
         }
 
         currentQuestionIndex++;
@@ -89,5 +107,13 @@ document.addEventListener("DOMContentLoaded", () => {
         quizSection.classList.add("hidden");
         resultSection.classList.remove("hidden");
         finalScore.textContent = `${score} / ${englishWords.length}`;
+
+        if (feedbackMode === "end") {
+            feedbackList.forEach(feedback => {
+                const feedbackItem = document.createElement("p");
+                feedbackItem.textContent = `${feedback.question} Your answer: ${feedback.userAnswer}, Correct answer: ${feedback.correctAnswer}`;
+                resultSection.appendChild(feedbackItem);
+            });
+        }
     }
 });
