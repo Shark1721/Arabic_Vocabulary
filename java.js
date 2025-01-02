@@ -50,9 +50,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (isCorrect) {
             score++;
-            quizFeedback.textContent = "Correct!";  // Correct answer
+            quizFeedback.textContent = "Correct!";  // Correct answer feedback
+            quizFeedback.style.color = "green";  // Optional: color green for correct
         } else {
-            quizFeedback.textContent = "Incorrect!";  // Incorrect answer
+            quizFeedback.textContent = `Incorrect! The correct answer is: ${(currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex]}`;
+            quizFeedback.style.color = "red";  // Optional: color red for incorrect
         }
 
         currentQuestionIndex++;
