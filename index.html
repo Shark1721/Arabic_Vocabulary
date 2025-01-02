@@ -14,9 +14,16 @@
             <h2>Enter Words</h2>
             <textarea id="englishWords" placeholder="English words, one per line"></textarea>
             <textarea id="arabicWords" placeholder="Arabic words, one per line"></textarea>
+            <label for="feedbackOption">Feedback Option:</label>
+            <select id="feedbackOption">
+                <option value="immediate">Show Correct Answers Immediately</option>
+                <option value="end">Show Correct Answers at the End</option>
+                <option value="none">Do Not Show Correct Answers</option>
+            </select>
             <button id="startQuiz">Start Quiz</button>
         </div>
-        <!-- Quiz Section -->
+
+       
        <!-- Quiz Section -->
         <div id="quiz-section" class="hidden">
             <h2 id="quiz-question"></h2>
