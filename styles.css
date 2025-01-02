@@ -42,16 +42,11 @@ button:hover {
     background-color: #45a049;
 }
 
-/* Responsive Design */
-@media (max-width: 600px) {
-    .container {
-        padding: 10px;
-        margin: 10px;
-    }
-    h1, h2 {
-        font-size: 1.5em;
-    }
-    button {
-        font-size: 0.9em;
-    }
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin: 5px 0;
 }
