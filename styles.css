@@ -25,15 +25,7 @@ textarea, input[type="text"] {
     margin: 10px 0;
     border: 1px solid #ddd;
     border-radius: 5px;
-}
-
-textarea {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    resize: none; /* This prevents resizing */
+    resize: none; /* Prevent resizing */
 }
 
 button {
