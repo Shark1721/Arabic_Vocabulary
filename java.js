@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             showNextQuestion();
         }
-});
+    });
 
 
         currentQuestionIndex++;
