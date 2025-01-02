@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Start quiz button listener
     startQuizBtn.addEventListener("click", () => {
-        console.log('Start quiz button clicked'); // Debugging log
+        console.log('Start quiz button clicked');
 
         // Grab input words and check length
         englishWords = englishInput.value.trim().split("\n");
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Submit answer button listener
     submitAnswer.addEventListener("click", (event) => {
         event.preventDefault(); // Prevent page reload
-        console.log('Submit answer button clicked'); // Debugging log
+        console.log('Submit answer button clicked');
 
         const userInput = userAnswer.value.trim();
         const isCorrect = (currentDirection === "en-ar")
@@ -61,6 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
             quizFeedback.textContent = "Incorrect!";
         }
 
+        // Check feedback option
         if (feedbackOption.value === "immediate") {
             const correctAnswer = (currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex];
             correctAnswers.push({ question: quizQuestion.textContent, correctAnswer });
@@ -82,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
         resultSection.classList.add("hidden");
         englishInput.value = "";
         arabicInput.value = "";
-        console.log('Restart quiz button clicked'); // Debugging log
+        console.log('Restart quiz button clicked');
     });
 
     function showNextQuestion() {
@@ -99,6 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
         resultSection.classList.remove("hidden");
         finalScore.textContent = `${score} / ${englishWords.length}`;
 
+        // Show correct answers if the option is "In the End"
         if (feedbackOption.value === "end") {
             let feedbackList = '';
             correctAnswers.forEach((item) => {
