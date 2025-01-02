@@ -14,7 +14,6 @@
             <h2>Enter Words</h2>
             <textarea id="englishWords" placeholder="English words, one per line"></textarea>
             <textarea id="arabicWords" placeholder="Arabic words, one per line"></textarea>
-            <label for="feedbackMode">Feedback Mode:</label>
             <select id="feedbackMode">
                 <option value="immediate">Immediate Feedback</option>
                 <option value="end">Feedback at End</option>
@@ -22,7 +21,6 @@
             </select>
             <button id="startQuiz">Start Quiz</button>
         </div>
-
         <!-- Quiz Section -->
         <div id="quiz-section" class="hidden">
             <h2 id="quiz-question"></h2>
@@ -30,12 +28,10 @@
             <button id="submitAnswer">Submit</button>
             <p id="quiz-feedback"></p>
         </div>
-
         <!-- Result Section -->
         <div id="result-section" class="hidden">
             <h2>Quiz Complete!</h2>
             <p>Your score is: <span id="finalScore"></span></p>
-            <h3>Incorrect Answers:</h3>
             <ul id="incorrect-answers"></ul>
             <button id="restartQuiz">Restart Quiz</button>
         </div>
