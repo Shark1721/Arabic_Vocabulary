@@ -20,6 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Start quiz button listener
     startQuizBtn.addEventListener("click", () => {
+        console.log('Start quiz button clicked');  // Debugging log
+
         // Grab input words and check length
         englishWords = englishInput.value.trim().split("\n");
         arabicWords = arabicInput.value.trim().split("\n");
@@ -42,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Submit answer button listener
     submitAnswer.addEventListener("click", (event) => {
         event.preventDefault();  // Prevent page reload
+        console.log('Submit answer button clicked');  // Debugging log
 
         const userInput = userAnswer.value.trim();
         const isCorrect = (currentDirection === "en-ar")
@@ -50,11 +53,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (isCorrect) {
             score++;
-            quizFeedback.textContent = "Correct!";  // Correct answer feedback
-            quizFeedback.style.color = "green";  // Optional: color green for correct
+            quizFeedback.textContent = "Correct!";
         } else {
-            quizFeedback.textContent = `Incorrect! The correct answer is: ${(currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex]}`;
-            quizFeedback.style.color = "red";  // Optional: color red for incorrect
+            quizFeedback.textContent = `Incorrect! Correct answer: ${(currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex]}`;
         }
 
         currentQuestionIndex++;
@@ -72,20 +73,21 @@ document.addEventListener("DOMContentLoaded", () => {
         resultSection.classList.add("hidden");
         englishInput.value = "";
         arabicInput.value = "";
+        console.log('Restart quiz button clicked');  // Debugging log
     });
 
     function showNextQuestion() {
-        quizFeedback.textContent = "";  // Clear previous feedback
+        quizFeedback.textContent = "";  // Reset feedback
         currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en";
         quizQuestion.textContent = currentDirection === "en-ar"
             ? `Translate to Arabic: ${englishWords[currentQuestionIndex]}`
             : `Translate to English: ${arabicWords[currentQuestionIndex]}`;
-        userAnswer.value = "";  // Clear the input field for next question
+        userAnswer.value = "";
     }
 
     function finishQuiz() {
         quizSection.classList.add("hidden");
         resultSection.classList.remove("hidden");
-        finalScore.textContent = `${score} / ${englishWords.length}`;  // Display score
+        finalScore.textContent = `${score} / ${englishWords.length}`;
     }
 });
