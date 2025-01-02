@@ -25,7 +25,6 @@ textarea, input[type="text"] {
     margin: 10px 0;
     border: 1px solid #ddd;
     border-radius: 5px;
-    resize: none; /* Prevent resizing */
 }
 
 button {
