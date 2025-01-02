@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const quizFeedback = document.getElementById("quiz-feedback");
     const finalScore = document.getElementById("finalScore");
     const restartQuiz = document.getElementById("restartQuiz");
-    const feedbackMode = document.getElementById("feedbackMode");
+    const feedbackMode = document.getElementById("feedbackMode"); // Feedback mode dropdown
 
     let englishWords = [];
     let arabicWords = [];
@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentDirection;
     let feedbackOption = "immediate"; // Default feedback option
 
+    // Start quiz button listener
     startQuizBtn.addEventListener("click", () => {
         englishWords = englishInput.value.trim().split("\n");
         arabicWords = arabicInput.value.trim().split("\n");
@@ -37,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
         showNextQuestion();
     });
 
+    // Submit answer button listener
     submitAnswer.addEventListener("click", (event) => {
         event.preventDefault();
 
@@ -56,17 +58,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (currentQuestionIndex >= englishWords.length) {
             finishQuiz();
         } else {
-            if (feedbackOption === "immediate") {
-                setTimeout(() => {
-                    quizFeedback.textContent = ""; // Clear feedback after a short delay
-                    showNextQuestion();
-                }, 1000);
-            } else {
-                showNextQuestion();
-            }
+            showNextQuestion();
         }
     });
 
+    // Restart quiz button listener
     restartQuiz.addEventListener("click", () => {
         setupSection.classList.remove("hidden");
         quizSection.classList.add("hidden");
@@ -76,7 +72,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function showNextQuestion() {
-        quizFeedback.textContent = ""; // Always clear previous feedback
+        quizFeedback.textContent = ""; // Clear feedback
+
         currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en";
         quizQuestion.textContent = currentDirection === "en-ar"
             ? `Translate to Arabic: ${englishWords[currentQuestionIndex]}`
