@@ -16,8 +16,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let arabicWords = [];
     let currentQuestionIndex = 0;
     let score = 0;
+    let currentDirection;
 
     startQuizBtn.addEventListener("click", () => {
+        console.log('Start quiz button clicked');
         englishWords = englishInput.value.trim().split("\n");
         arabicWords = arabicInput.value.trim().split("\n");
 
@@ -34,7 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
         showNextQuestion();
     });
 
-    submitAnswer.addEventListener("click", () => {
+    submitAnswer.addEventListener("click", (event) => {
+        event.preventDefault();  // Prevent page reload
         const userInput = userAnswer.value.trim();
         const isCorrect = (currentDirection === "en-ar")
             ? userInput === arabicWords[currentQuestionIndex]
@@ -44,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
             score++;
             quizFeedback.textContent = "Correct!";
         } else {
-            quizFeedback.textContent = Incorrect! Correct answer: ${(currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex]};
+            quizFeedback.textContent = `Incorrect! Correct answer: ${(currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex]}`;
         }
 
         currentQuestionIndex++;
@@ -63,20 +66,18 @@ document.addEventListener("DOMContentLoaded", () => {
         arabicInput.value = "";
     });
 
-    let currentDirection;
-
     function showNextQuestion() {
         quizFeedback.textContent = "";
         currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en";
         quizQuestion.textContent = currentDirection === "en-ar"
-            ? Translate to Arabic: ${englishWords[currentQuestionIndex]}
-            : Translate to English: ${arabicWords[currentQuestionIndex]};
+            ? `Translate to Arabic: ${englishWords[currentQuestionIndex]}`
+            : `Translate to English: ${arabicWords[currentQuestionIndex]}`;
         userAnswer.value = "";
     }
 
     function finishQuiz() {
         quizSection.classList.add("hidden");
         resultSection.classList.remove("hidden");
-        finalScore.textContent = ${score} / ${englishWords.length};
+        finalScore.textContent = `${score} / ${englishWords.length}`;
     }
 });
