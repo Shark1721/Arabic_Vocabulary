@@ -43,29 +43,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Submit answer button listener
     submitAnswer.addEventListener("click", (event) => {
-    event.preventDefault();  // Prevent form submission or page reload
-
-    const userInput = userAnswer.value.trim();
-    const isCorrect = (currentDirection === "en-ar")
-        ? userInput === arabicWords[currentQuestionIndex]
-        : userInput === englishWords[currentQuestionIndex];
-
-    if (isCorrect) {
-        score++;
-        quizFeedback.textContent = `Correct!`;  // Display correct feedback
-        quizFeedback.style.color = "green";      // Optional: make feedback green
-    } else {
-        quizFeedback.textContent = `Incorrect! Correct answer: ${(currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex]}`;  // Show correct answer
-        quizFeedback.style.color = "red";        // Optional: make feedback red
-    }
-
-    // Move to the next question or finish the quiz
-    currentQuestionIndex++;
-    if (currentQuestionIndex >= englishWords.length) {
-        finishQuiz();
-    } else {
-        showNextQuestion();
-    }
+        event.preventDefault();  // Prevent form submission or page reload
+    
+        const userInput = userAnswer.value.trim();
+        const isCorrect = (currentDirection === "en-ar")
+            ? userInput === arabicWords[currentQuestionIndex]
+            : userInput === englishWords[currentQuestionIndex];
+    
+        if (isCorrect) {
+            score++;
+            quizFeedback.textContent = `Correct!`;  // Display correct feedback
+            quizFeedback.style.color = "green";      // Optional: make feedback green
+        } else {
+            quizFeedback.textContent = `Incorrect! Correct answer: ${(currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex]}`;  // Show correct answer
+            quizFeedback.style.color = "red";        // Optional: make feedback red
+        }
+    
+        // Move to the next question or finish the quiz
+        currentQuestionIndex++;
+        if (currentQuestionIndex >= englishWords.length) {
+            finishQuiz();
+        } else {
+            showNextQuestion();
+        }
 });
 
 
