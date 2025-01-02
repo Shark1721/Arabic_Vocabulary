@@ -1,84 +1,45 @@
-console.log("Script is working!");
+let incorrectWords = []; // To store incorrect answers
 
-document.addEventListener("DOMContentLoaded", () => {
-    const englishInput = document.getElementById("englishWords");
-    const arabicInput = document.getElementById("arabicWords");
-    const startQuizBtn = document.getElementById("startQuiz");
-    const quizSection = document.getElementById("quiz-section");
-    const setupSection = document.getElementById("setup-section");
-    const resultSection = document.getElementById("result-section");
-    const quizQuestion = document.getElementById("quiz-question");
-    const userAnswer = document.getElementById("userAnswer");
-    const submitAnswer = document.getElementById("submitAnswer");
-    const quizFeedback = document.getElementById("quiz-feedback");
-    const finalScore = document.getElementById("finalScore");
-    const restartQuiz = document.getElementById("restartQuiz");
+submitAnswer.addEventListener("click", () => {
+    const userInput = userAnswer.value.trim();
+    const correctAnswer = (currentDirection === "en-ar")
+        ? arabicWords[currentQuestionIndex]
+        : englishWords[currentQuestionIndex];
 
-    let englishWords = [];
-    let arabicWords = [];
-    let currentQuestionIndex = 0;
-    let score = 0;
+    const isCorrect = userInput === correctAnswer;
 
-    startQuizBtn.addEventListener("click", () => {
-        englishWords = englishInput.value.trim().split("\n");
-        arabicWords = arabicInput.value.trim().split("\n");
-
-        if (englishWords.length !== arabicWords.length) {
-            alert("English and Arabic word lists must have the same length!");
-            return;
-        }
-
-        setupSection.classList.add("hidden");
-        quizSection.classList.remove("hidden");
-
-        score = 0;
-        currentQuestionIndex = 0;
-        showNextQuestion();
-    });
-
-    submitAnswer.addEventListener("click", () => {
-        const userInput = userAnswer.value.trim();
-        const isCorrect = (currentDirection === "en-ar")
-            ? userInput === arabicWords[currentQuestionIndex]
-            : userInput === englishWords[currentQuestionIndex];
-
-        if (isCorrect) {
-            score++;
-            quizFeedback.textContent = "Correct!";
-        } else {
-            quizFeedback.textContent = `Incorrect! Correct answer: ${(currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex]}`;
-        }
-
+    if (isCorrect) {
+        score++;
+        quizFeedback.textContent = "Correct!";
+        // Reset the question (no need to save incorrect answers)
         currentQuestionIndex++;
-        if (currentQuestionIndex >= englishWords.length) {
-            finishQuiz();
-        } else {
-            showNextQuestion();
-        }
-    });
-
-    restartQuiz.addEventListener("click", () => {
-        setupSection.classList.remove("hidden");
-        quizSection.classList.add("hidden");
-        resultSection.classList.add("hidden");
-        englishInput.value = "";
-        arabicInput.value = "";
-    });
-
-    let currentDirection;
-
-    function showNextQuestion() {
-        quizFeedback.textContent = "";
-        currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en";
-        quizQuestion.textContent = currentDirection === "en-ar"
-            ? `Translate to Arabic: ${englishWords[currentQuestionIndex]}`
-            : `Translate to English: ${arabicWords[currentQuestionIndex]}`;
-        userAnswer.value = "";
+    } else {
+        quizFeedback.textContent = `Incorrect! The correct answer was: ${correctAnswer}`;
+        // Store the incorrect word and pick it again randomly later
+        incorrectWords.push({ question: currentDirection === "en-ar" ? englishWords[currentQuestionIndex] : arabicWords[currentQuestionIndex], correctAnswer: correctAnswer });
     }
 
-    function finishQuiz() {
-        quizSection.classList.add("hidden");
-        resultSection.classList.remove("hidden");
-        finalScore.textContent = `${score} / ${englishWords.length}`;
+    if (currentQuestionIndex >= englishWords.length) {
+        finishQuiz();
+    } else {
+        showNextQuestion();
     }
 });
+
+function showNextQuestion() {
+    quizFeedback.textContent = "";
+    let allWords = [...englishWords, ...incorrectWords.map(item => item.question)];
+    currentQuestionIndex = Math.floor(Math.random() * allWords.length);
+
+    let currentWord = allWords[currentQuestionIndex];
+
+    if (Math.random() < 0.5) {
+        // English to Arabic
+        quizQuestion.textContent = `Translate to Arabic: ${currentWord}`;
+    } else {
+        // Arabic to English
+        quizQuestion.textContent = `Translate to English: ${currentWord}`;
+    }
+
+    userAnswer.value = "";
+}
