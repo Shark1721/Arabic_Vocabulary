@@ -53,9 +53,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (isCorrect) {
             score++;
-            quizFeedback.textContent = "Correct!";
+            quizFeedback.textContent = "Correct!";  // Display 'Correct!'
         } else {
-            quizFeedback.textContent = "Incorrect!";
+            quizFeedback.textContent = "Incorrect!";  // Display 'Incorrect!'
         }
 
         currentQuestionIndex++;
@@ -77,17 +77,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function showNextQuestion() {
-        quizFeedback.textContent = "";
+        quizFeedback.textContent = "";  // Clear previous feedback
         currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en";
-        quizQuestion.textContent = currentDirection === "en-ar"
-            ? `Translate to Arabic: ${englishWords[currentQuestionIndex]}`
-            : `Translate to English: ${arabicWords[currentQuestionIndex]}`;
-        userAnswer.value = "";
-    }
-
-    function finishQuiz() {
-        quizSection.classList.add("hidden");
-        resultSection.classList.remove("hidden");
-        finalScore.textContent = `${score} / ${englishWords.length}`;
-    }
-});
+        quizQuesti
