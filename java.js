@@ -90,4 +90,4 @@ document.addEventListener("DOMContentLoaded", () => {
         resultSection.classList.remove("hidden");
         finalScore.textContent = `${score} / ${englishWords.length}`;
     }
-});
+});  // This closing bracket ends the DOMContentLoaded event listener
