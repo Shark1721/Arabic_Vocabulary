@@ -19,14 +19,15 @@ body {
     display: none;
 }
 
-/* Disable resize for specific textareas */
+/* Center the textareas */
 #englishWords, #arabicWords {
     width: 100%;
+    max-width: 400px;  /* Limit the width for better appearance */
     padding: 10px;
-    margin: 10px 0;
+    margin: 10px auto;  /* Auto margins to center horizontally */
     border: 1px solid #ddd;
     border-radius: 5px;
-    resize: none; /* Disable resizing */
+    resize: none !important; /* Force disable resizing */
 }
 
 button {
