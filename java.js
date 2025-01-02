@@ -82,4 +82,4 @@ document.addEventListener("DOMContentLoaded", () => {
         resultSection.classList.remove("hidden");
         finalScore.textContent = `${score} / ${englishWords.length}`;
     }
-+}); // Ensure the closing parenthesis here is for the 'DOMContentLoaded' listener.
+});
