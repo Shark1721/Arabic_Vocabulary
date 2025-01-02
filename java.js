@@ -48,4 +48,38 @@ document.addEventListener("DOMContentLoaded", () => {
             quizFeedback.textContent = "Correct!";
             quizFeedback.style.color = "green";
         } else {
-            quizFeedback.textContent = `Incorrect! Corr
+            quizFeedback.textContent = `Incorrect! Correct answer: ${(currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex]}`;
+            quizFeedback.style.color = "red";
+        }
+
+        currentQuestionIndex++;
+        if (currentQuestionIndex >= englishWords.length) {
+            finishQuiz();
+        } else {
+            showNextQuestion();
+        }
+    });
+
+    restartQuiz.addEventListener("click", () => {
+        setupSection.classList.remove("hidden");
+        quizSection.classList.add("hidden");
+        resultSection.classList.add("hidden");
+        englishInput.value = "";
+        arabicInput.value = "";
+    });
+
+    function showNextQuestion() {
+        quizFeedback.textContent = "";
+        currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en";
+        quizQuestion.textContent = currentDirection === "en-ar"
+            ? `Translate to Arabic: ${englishWords[currentQuestionIndex]}`
+            : `Translate to English: ${arabicWords[currentQuestionIndex]}`;
+        userAnswer.value = "";
+    }
+
+    function finishQuiz() {
+        quizSection.classList.add("hidden");
+        resultSection.classList.remove("hidden");
+        finalScore.textContent = `${score} / ${englishWords.length}`;
+    }
+});
