@@ -11,8 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const submitAnswer = document.getElementById("submitAnswer");
     const quizFeedback = document.getElementById("quiz-feedback");
     const finalScore = document.getElementById("finalScore");
-    const restartQuiz = document.getElementById("restartQuiz");
     const incorrectAnswersList = document.getElementById("incorrect-answers");
+    const restartQuiz = document.getElementById("restartQuiz");
 
     let englishWords = [];
     let arabicWords = [];
@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let incorrectAnswers = [];
     let feedbackMode = "immediate";
 
+    // Start quiz button listener
     startQuizBtn.addEventListener("click", () => {
         englishWords = englishInput.value.trim().split("\n");
         arabicWords = arabicInput.value.trim().split("\n");
@@ -41,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
         showNextQuestion();
     });
 
+    // Submit answer button listener
     submitAnswer.addEventListener("click", (event) => {
         event.preventDefault();
 
@@ -72,6 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // Restart quiz button listener
     restartQuiz.addEventListener("click", () => {
         setupSection.classList.remove("hidden");
         quizSection.classList.add("hidden");
