@@ -11,19 +11,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const quizFeedback = document.getElementById("quiz-feedback");
     const finalScore = document.getElementById("finalScore");
     const restartQuiz = document.getElementById("restartQuiz");
-    const feedbackMode = document.getElementById("feedbackMode"); // Feedback mode dropdown
+    const feedbackOption = document.getElementById("feedbackOption");
 
     let englishWords = [];
     let arabicWords = [];
     let currentQuestionIndex = 0;
     let score = 0;
     let currentDirection;
-    let feedbackOption = "immediate"; // Default feedback option
-    let userAnswers = []; // Store answers for feedback at the end
     let correctAnswers = [];
 
     // Start quiz button listener
     startQuizBtn.addEventListener("click", () => {
+        console.log('Start quiz button clicked'); // Debugging log
+
+        // Grab input words and check length
         englishWords = englishInput.value.trim().split("\n");
         arabicWords = arabicInput.value.trim().split("\n");
 
@@ -32,42 +33,38 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        feedbackOption = feedbackMode.value; // Get selected feedback option
+        // Hide setup section and show quiz section
         setupSection.classList.add("hidden");
         quizSection.classList.remove("hidden");
+
+        // Reset quiz
         score = 0;
         currentQuestionIndex = 0;
-        userAnswers = [];
         correctAnswers = [];
         showNextQuestion();
     });
 
     // Submit answer button listener
     submitAnswer.addEventListener("click", (event) => {
-        event.preventDefault();
+        event.preventDefault(); // Prevent page reload
+        console.log('Submit answer button clicked'); // Debugging log
 
         const userInput = userAnswer.value.trim();
-        const correctAnswer = (currentDirection === "en-ar")
-            ? arabicWords[currentQuestionIndex]
-            : englishWords[currentQuestionIndex];
+        const isCorrect = (currentDirection === "en-ar")
+            ? userInput === arabicWords[currentQuestionIndex]
+            : userInput === englishWords[currentQuestionIndex];
 
-        const isCorrect = userInput === correctAnswer;
-
-        if (feedbackOption === "immediate") {
-            // Immediate feedback
-            if (isCorrect) {
-                quizFeedback.textContent = "Correct!";
-                score++;
-            } else {
-                quizFeedback.textContent = `Incorrect! Correct answer: ${correctAnswer}`;
-            }
-            // Wait for user to click submit to go to the next question
+        if (isCorrect) {
+            score++;
+            quizFeedback.textContent = "Correct!";
         } else {
-            // Store the user answer and correctness for the end feedback
-            userAnswers.push({ userInput, isCorrect, correctAnswer });
-            if (isCorrect) {
-                score++;
-            }
+            quizFeedback.textContent = "Incorrect!";
+        }
+
+        if (feedbackOption.value === "immediate") {
+            const correctAnswer = (currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex];
+            correctAnswers.push({ question: quizQuestion.textContent, correctAnswer });
+            quizFeedback.textContent += ` Correct answer: ${correctAnswer}`;
         }
 
         currentQuestionIndex++;
@@ -85,12 +82,12 @@ document.addEventListener("DOMContentLoaded", () => {
         resultSection.classList.add("hidden");
         englishInput.value = "";
         arabicInput.value = "";
+        console.log('Restart quiz button clicked'); // Debugging log
     });
 
     function showNextQuestion() {
         quizFeedback.textContent = ""; // Clear previous feedback
-
-        currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en";
+        currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en"; // Random direction (English to Arabic or vice versa)
         quizQuestion.textContent = currentDirection === "en-ar"
             ? `Translate to Arabic: ${englishWords[currentQuestionIndex]}`
             : `Translate to English: ${arabicWords[currentQuestionIndex]}`;
@@ -100,21 +97,14 @@ document.addEventListener("DOMContentLoaded", () => {
     function finishQuiz() {
         quizSection.classList.add("hidden");
         resultSection.classList.remove("hidden");
-
-        // Show final score
         finalScore.textContent = `${score} / ${englishWords.length}`;
 
-        // Handle different feedback modes
-        if (feedbackOption === "end") {
-            // Show incorrect answers at the end, with the correct answers
-            let incorrectAnswersList = userAnswers
-                .filter(answer => !answer.isCorrect)
-                .map(answer => `Question: ${quizQuestion.textContent} - Your answer: ${answer.userInput} - Correct answer: ${answer.correctAnswer}`)
-                .join("\n");
-            quizFeedback.textContent = incorrectAnswersList;
-        } else if (feedbackOption === "none") {
-            // Show no feedback at the end
-            quizFeedback.textContent = "No feedback shown.";
+        if (feedbackOption.value === "end") {
+            let feedbackList = '';
+            correctAnswers.forEach((item) => {
+                feedbackList += `<p>Question: ${item.question} | Correct answer: ${item.correctAnswer}</p>`;
+            });
+            resultSection.innerHTML += feedbackList;
         }
     }
 });
