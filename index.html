@@ -14,34 +14,30 @@
             <h2>Enter Words</h2>
             <textarea id="englishWords" placeholder="English words, one per line"></textarea>
             <textarea id="arabicWords" placeholder="Arabic words, one per line"></textarea>
-            <label for="feedbackOption">Feedback Option:</label>
-            <select id="feedbackMode">
-                <option value="immediate">Show Correct Answers Immediately</option>
-                <option value="end">Show Correct Answers at the End</option>
-                <option value="none">Do Not Show Correct Answers</option>
-            </select>
             <label for="feedbackMode">Feedback Mode:</label>
-
+            <select id="feedbackMode">
+                <option value="immediate">Immediate Feedback</option>
+                <option value="end">Feedback at End</option>
+                <option value="none">No Feedback</option>
+            </select>
             <button id="startQuiz">Start Quiz</button>
         </div>
 
-       
-       <!-- Quiz Section -->
+        <!-- Quiz Section -->
         <div id="quiz-section" class="hidden">
             <h2 id="quiz-question"></h2>
             <input type="text" id="userAnswer" placeholder="Your answer here">
             <button id="submitAnswer">Submit</button>
-            <p id="quiz-feedback"></p> <!-- This is where feedback will appear -->
+            <p id="quiz-feedback"></p>
         </div>
 
-        </div>
         <!-- Result Section -->
         <div id="result-section" class="hidden">
             <h2>Quiz Complete!</h2>
             <p>Your score is: <span id="finalScore"></span></p>
-            <button id="restartQuiz">Restart Quiz</button>
             <h3>Incorrect Answers:</h3>
             <ul id="incorrect-answers"></ul>
+            <button id="restartQuiz">Restart Quiz</button>
         </div>
     </div>
     <script src="java.js" defer></script>
