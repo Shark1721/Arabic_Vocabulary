@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let score = 0;
     let currentDirection;
     let feedbackOption = "immediate"; // Default feedback option
+    let userAnswers = []; // Store answers for feedback at the end
+    let correctAnswers = [];
 
     // Start quiz button listener
     startQuizBtn.addEventListener("click", () => {
@@ -35,6 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
         quizSection.classList.remove("hidden");
         score = 0;
         currentQuestionIndex = 0;
+        userAnswers = [];
+        correctAnswers = [];
         showNextQuestion();
     });
 
@@ -43,15 +47,26 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault();
 
         const userInput = userAnswer.value.trim();
-        const isCorrect = (currentDirection === "en-ar")
-            ? userInput === arabicWords[currentQuestionIndex]
-            : userInput === englishWords[currentQuestionIndex];
+        const correctAnswer = (currentDirection === "en-ar")
+            ? arabicWords[currentQuestionIndex]
+            : englishWords[currentQuestionIndex];
+
+        const isCorrect = userInput === correctAnswer;
 
         if (feedbackOption === "immediate") {
+            // Immediate feedback
             if (isCorrect) {
                 quizFeedback.textContent = "Correct!";
+                score++;
             } else {
-                quizFeedback.textContent = "Incorrect!";
+                quizFeedback.textContent = `Incorrect! Correct answer: ${correctAnswer}`;
+            }
+            // Wait for user to click submit to go to the next question
+        } else {
+            // Store the user answer and correctness for the end feedback
+            userAnswers.push({ userInput, isCorrect, correctAnswer });
+            if (isCorrect) {
+                score++;
             }
         }
 
@@ -85,6 +100,21 @@ document.addEventListener("DOMContentLoaded", () => {
     function finishQuiz() {
         quizSection.classList.add("hidden");
         resultSection.classList.remove("hidden");
+
+        // Show final score
         finalScore.textContent = `${score} / ${englishWords.length}`;
+
+        // Handle different feedback modes
+        if (feedbackOption === "end") {
+            // Show incorrect answers at the end, with the correct answers
+            let incorrectAnswersList = userAnswers
+                .filter(answer => !answer.isCorrect)
+                .map(answer => `Question: ${quizQuestion.textContent} - Your answer: ${answer.userInput} - Correct answer: ${answer.correctAnswer}`)
+                .join("\n");
+            quizFeedback.textContent = incorrectAnswersList;
+        } else if (feedbackOption === "none") {
+            // Show no feedback at the end
+            quizFeedback.textContent = "No feedback shown.";
+        }
     }
 });
