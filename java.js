@@ -2,7 +2,11 @@ let incorrectWords = []; // To store incorrect answers
 let answerDisplayOption = 'immediately'; // Default value
 let currentQuestionIndex = 0;
 let score = 0;
-
+let englishWords = []; // Store English words
+let arabicWords = []; // Store Arabic words
+const setupSection = document.getElementById("setup-section");
+const quizSection = document.getElementById("quiz-section");
+const resultSection = document.getElementById("result-section");
 const answerDisplaySelect = document.getElementById("answerDisplayOption");
 const submitAnswer = document.getElementById("submitAnswer");
 const userAnswer = document.getElementById("userAnswer");
@@ -10,6 +14,29 @@ const quizFeedback = document.getElementById("quiz-feedback");
 const quizQuestion = document.getElementById("quiz-question");
 const finalScore = document.getElementById("finalScore");
 const restartQuiz = document.getElementById("restartQuiz");
+const startQuizButton = document.getElementById("startQuiz");
+
+startQuizButton.addEventListener("click", () => {
+    // Get the words from the textareas
+    englishWords = document.getElementById("englishWords").value.trim().split('\n');
+    arabicWords = document.getElementById("arabicWords").value.trim().split('\n');
+    
+    // Make sure there are words entered
+    if (englishWords.length === 0 || arabicWords.length === 0) {
+        alert("Please enter both English and Arabic words!");
+        return;
+    }
+
+    // Hide the setup section and show the quiz section
+    setupSection.classList.add("hidden");
+    quizSection.classList.remove("hidden");
+
+    // Start the quiz
+    currentQuestionIndex = 0;
+    score = 0;
+    incorrectWords = [];
+    showNextQuestion();
+});
 
 submitAnswer.addEventListener("click", () => {
     const userInput = userAnswer.value.trim();
