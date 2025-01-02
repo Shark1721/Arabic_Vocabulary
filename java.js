@@ -66,28 +66,4 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Restart quiz button listener
-    restartQuiz.addEventListener("click", () => {
-        setupSection.classList.remove("hidden");
-        quizSection.classList.add("hidden");
-        resultSection.classList.add("hidden");
-        englishInput.value = "";
-        arabicInput.value = "";
-        console.log('Restart quiz button clicked');  // Debugging log
-    });
-
-    function showNextQuestion() {
-        quizFeedback.textContent = "";  // Reset feedback
-        currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en";
-        quizQuestion.textContent = currentDirection === "en-ar"
-            ? `Translate to Arabic: ${englishWords[currentQuestionIndex]}`
-            : `Translate to English: ${arabicWords[currentQuestionIndex]}`;
-        userAnswer.value = "";
-    }
-
-    function finishQuiz() {
-        quizSection.classList.add("hidden");
-        resultSection.classList.remove("hidden");
-        finalScore.textContent = `${score} / ${englishWords.length}`;
-    }
-});
+    // Restart quiz butto
