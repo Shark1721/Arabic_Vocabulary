@@ -41,12 +41,13 @@ button {
 button:hover {
     background-color: #45a049;
 }
+
 #quiz-feedback {
     font-size: 1.2em;
     margin-top: 10px;
     font-weight: bold;
+    color: black;
 }
-
 
 /* Responsive Design */
 @media (max-width: 600px) {
