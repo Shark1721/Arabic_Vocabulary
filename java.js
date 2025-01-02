@@ -1,4 +1,15 @@
 let incorrectWords = []; // To store incorrect answers
+let answerDisplayOption = 'immediately'; // Default value
+let currentQuestionIndex = 0;
+let score = 0;
+
+const answerDisplaySelect = document.getElementById("answerDisplayOption");
+const submitAnswer = document.getElementById("submitAnswer");
+const userAnswer = document.getElementById("userAnswer");
+const quizFeedback = document.getElementById("quiz-feedback");
+const quizQuestion = document.getElementById("quiz-question");
+const finalScore = document.getElementById("finalScore");
+const restartQuiz = document.getElementById("restartQuiz");
 
 submitAnswer.addEventListener("click", () => {
     const userInput = userAnswer.value.trim();
@@ -15,8 +26,12 @@ submitAnswer.addEventListener("click", () => {
         currentQuestionIndex++;
     } else {
         quizFeedback.textContent = `Incorrect! The correct answer was: ${correctAnswer}`;
-        // Store the incorrect word and pick it again randomly later
-        incorrectWords.push({ question: currentDirection === "en-ar" ? englishWords[currentQuestionIndex] : arabicWords[currentQuestionIndex], correctAnswer: correctAnswer });
+
+        // Store the incorrect word and pick it again randomly later if needed
+        incorrectWords.push({
+            question: currentDirection === "en-ar" ? englishWords[currentQuestionIndex] : arabicWords[currentQuestionIndex],
+            correctAnswer: correctAnswer
+        });
     }
 
     if (currentQuestionIndex >= englishWords.length) {
@@ -26,6 +41,7 @@ submitAnswer.addEventListener("click", () => {
     }
 });
 
+// This function will be called to show the next question
 function showNextQuestion() {
     quizFeedback.textContent = "";
     let allWords = [...englishWords, ...incorrectWords.map(item => item.question)];
@@ -43,3 +59,28 @@ function showNextQuestion() {
 
     userAnswer.value = "";
 }
+
+function finishQuiz() {
+    if (answerDisplayOption === 'end') {
+        // Show incorrect answers and their correct answers at the end
+        quizFeedback.textContent = "Here are your incorrect answers:";
+        incorrectWords.forEach((item) => {
+            quizFeedback.textContent += `\nQuestion: ${item.question}, Correct Answer: ${item.correctAnswer}`;
+        });
+    }
+    finalScore.textContent = `${score} / ${englishWords.length}`;
+}
+
+// Handle the option change for how answers are displayed
+answerDisplaySelect.addEventListener('change', (e) => {
+    answerDisplayOption = e.target.value;
+});
+
+// Handle restart quiz logic
+restartQuiz.addEventListener("click", () => {
+    setupSection.classList.remove("hidden");
+    quizSection.classList.add("hidden");
+    resultSection.classList.add("hidden");
+    englishInput.value = "";
+    arabicInput.value = "";
+});
