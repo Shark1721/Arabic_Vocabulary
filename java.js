@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ? userInput === arabicWords[currentQuestionIndex]
             : userInput === englishWords[currentQuestionIndex];
 
-        // Feedback options
+        // Show correct/incorrect feedback
         quizFeedback.textContent = isCorrect ? "Correct!" : "Incorrect!";
 
         // If immediate feedback is selected, show the correct answer
@@ -69,11 +69,17 @@ document.addEventListener("DOMContentLoaded", () => {
             isCorrect
         });
 
+        // Update the score if correct
+        if (isCorrect) {
+            score++;
+        }
+
         // Enable next button to move to the next question
         nextQuestionBtn.classList.remove("hidden");
-        // If feedback option is "immediate", show "Next" button
+
+        // Handle next question behavior
         if (feedbackOption.value === "immediate") {
-            nextQuestionBtn.classList.remove("hidden");
+            // If feedback is immediate, we wait for the user to click "Next" to proceed
         } else {
             // Otherwise, automatically go to the next question
             currentQuestionIndex++;
@@ -85,16 +91,19 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Next Question button listener
     // Next Question button listener (only visible for "immediate feedback")
     nextQuestionBtn.addEventListener("click", () => {
         currentQuestionIndex++;
+
+        // Hide the next button and feedback message for now
+        nextQuestionBtn.classList.add("hidden");
+        quizFeedback.textContent = "";
+
+        // Proceed to the next question or finish the quiz if the last question
         if (currentQuestionIndex >= englishWords.length) {
             finishQuiz();
         } else {
             showNextQuestion();
-            nextQuestionBtn.classList.add("hidden"); // Hide "Next" button
-            quizFeedback.textContent = ""; // Clear previous feedback
         }
     });
 
@@ -123,14 +132,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (feedbackOption.value === "end") {
             // Show list of corrected answers
-            correctAnswersList.innerHTML = "";
+            correctAnswersList.innerHTML = ""; // Clear any existing list
             answers.forEach(answer => {
-                const li = document.createElement("li");
-                li.textContent = `${answer.question} - Your answer: ${answer.userAnswer} - Correct answer: ${answer.correctAnswer}`;
-                correctAnswersList.appendChild(li);
+                if (!answer.isCorrect) {
+                    const li = document.createElement("li");
+                    li.textContent = `Question: ${answer.question} - Your answer: ${answer.userAnswer} - Correct answer: ${answer.correctAnswer}`;
+                    correctAnswersList.appendChild(li);
+                }
             });
         } else if (feedbackOption.value === "none") {
-            // Do nothing for feedback
+            // Do nothing for feedback, only show score
+        } else if (feedbackOption.value === "immediate") {
+            // For immediate feedback, we already showed answers during the quiz
+            // So, nothing extra is needed here
         }
     }
 });
