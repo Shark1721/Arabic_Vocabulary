@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const submitAnswer = document.getElementById("submitAnswer");
     const quizFeedback = document.getElementById("quiz-feedback");
     const finalScore = document.getElementById("finalScore");
-    const restartQuiz = document.getElementById("restartQuiz");
     const nextQuestionBtn = document.getElementById("nextQuestion");
 
     let englishWords = [];
@@ -46,22 +45,21 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault(); // Prevent page reload
 
         const userInput = userAnswer.value.trim();
+        const currentDirection = currentQuestionIndex % 2 === 0 ? "en-ar" : "ar-en";  // Toggle direction
         const isCorrect = (currentDirection === "en-ar")
-            ? userInput === arabicWords[currentQuestionIndex]
-            : userInput === englishWords[currentQuestionIndex];
+            ? userInput === arabicWords[Math.floor(currentQuestionIndex / 2)]
+            : userInput === englishWords[Math.floor(currentQuestionIndex / 2)];
 
-        // Feedback options
+        // Feedback
         quizFeedback.textContent = isCorrect ? "Correct!" : "Incorrect!";
-
-        // If immediate feedback is selected, show the correct answer
         if (!isCorrect) {
-            quizFeedback.textContent += ` Correct answer: ${(currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex]}`;
+            quizFeedback.textContent += ` Correct answer: ${(currentDirection === "en-ar") ? arabicWords[Math.floor(currentQuestionIndex / 2)] : englishWords[Math.floor(currentQuestionIndex / 2)]}`;
         }
 
         // Store the answer (whether correct or incorrect)
         answers.push({
             question: quizQuestion.textContent,
-            correctAnswer: currentDirection === "en-ar" ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex],
+            correctAnswer: currentDirection === "en-ar" ? arabicWords[Math.floor(currentQuestionIndex / 2)] : englishWords[Math.floor(currentQuestionIndex / 2)],
             userAnswer: userInput,
             isCorrect
         });
@@ -71,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
             score++;
         }
 
-        // Show next button for immediate feedback
+        // Show next button
         nextQuestionBtn.classList.remove("hidden");
     });
 
@@ -102,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function showNextQuestion() {
         const wordIndex = Math.floor(currentQuestionIndex / 2); // Divide by 2 to alternate the word index
-        currentDirection = currentQuestionIndex % 2 === 0 ? "en-ar" : "ar-en"; // Alternate between directions
+        const currentDirection = currentQuestionIndex % 2 === 0 ? "en-ar" : "ar-en"; // Alternate between directions
 
         quizQuestion.textContent = currentDirection === "en-ar"
             ? `Translate to Arabic: ${englishWords[wordIndex]}`
@@ -117,8 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
         resultSection.classList.remove("hidden");
         finalScore.textContent = `${score} / ${englishWords.length * 2}`; // Double the score to reflect the number of questions
 
-        // Show corrected answers list
-        correctAnswersList.innerHTML = ""; // Clear any existing list
+        // Display corrected answers
         answers.forEach(answer => {
             const li = document.createElement("li");
             li.textContent = `Question: ${answer.question} - Your answer: ${answer.userAnswer} - Correct answer: ${answer.correctAnswer}`;
