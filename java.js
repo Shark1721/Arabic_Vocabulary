@@ -58,18 +58,34 @@ document.addEventListener("DOMContentLoaded", () => {
             quizFeedback.textContent = "Incorrect!";
         }
 
-        if (feedbackMode === "immediate" && !isCorrect) {
+        if (feedbackMode === "immediate") {
             const correctAnswer = currentDirection === "en-ar"
                 ? arabicWords[currentQuestionIndex]
                 : englishWords[currentQuestionIndex];
             quizFeedback.textContent += ` Correct answer: ${correctAnswer}`;
         }
 
+        // Add correct answers for end feedback if needed
+        if (!isCorrect || feedbackMode === "end") {
+            const correctAnswer = currentDirection === "en-ar"
+                ? arabicWords[currentQuestionIndex]
+                : englishWords[currentQuestionIndex];
+            correctAnswers.push({
+                question: quizQuestion.textContent,
+                correctAnswer,
+            });
+        }
+
+        // Handle modes
         if (feedbackMode === "immediate") {
             submitAnswer.textContent = "Next";
-            submitAnswer.onclick = () => proceedToNext();
+            submitAnswer.onclick = () => {
+                currentQuestionIndex++;
+                handleNextQuestion();
+            };
         } else {
-            proceedToNext();
+            currentQuestionIndex++;
+            handleNextQuestion();
         }
     });
 
@@ -80,11 +96,17 @@ document.addEventListener("DOMContentLoaded", () => {
         resultSection.classList.add("hidden");
         englishInput.value = "";
         arabicInput.value = "";
+        quizFeedback.textContent = ""; // Clear any lingering feedback
     });
 
     function showNextQuestion() {
         quizFeedback.textContent = "";
         submitAnswer.textContent = "Submit";
+        submitAnswer.onclick = (event) => {
+            event.preventDefault();
+            handleAnswerSubmit();
+        };
+
         currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en";
         quizQuestion.textContent = currentDirection === "en-ar"
             ? `Translate to Arabic: ${englishWords[currentQuestionIndex]}`
@@ -92,8 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
         userAnswer.value = "";
     }
 
-    function proceedToNext() {
-        currentQuestionIndex++;
+    function handleNextQuestion() {
         if (currentQuestionIndex >= englishWords.length) {
             finishQuiz();
         } else {
@@ -107,11 +128,36 @@ document.addEventListener("DOMContentLoaded", () => {
         finalScore.textContent = `${score} / ${englishWords.length}`;
 
         if (feedbackMode === "end") {
-            let feedbackList = "";
-            correctAnswers.forEach(item => {
-                feedbackList += `<p>Question: ${item.question} | Correct answer: ${item.correctAnswer}</p>`;
-            });
-            resultSection.innerHTML += feedbackList;
+            const feedbackList = correctAnswers
+                .map((item) => `<li>Question: ${item.question}, Correct Answer: ${item.correctAnswer}</li>`)
+                .join("");
+            document.getElementById("correctAnswersList").innerHTML = feedbackList;
+        } else {
+            document.getElementById("correctAnswersList").innerHTML = "";
         }
+    }
+
+    function handleAnswerSubmit() {
+        const userInput = userAnswer.value.trim();
+        const isCorrect = (currentDirection === "en-ar")
+            ? userInput === arabicWords[currentQuestionIndex]
+            : userInput === englishWords[currentQuestionIndex];
+
+        if (isCorrect) {
+            score++;
+            quizFeedback.textContent = "Correct!";
+        } else {
+            quizFeedback.textContent = "Incorrect!";
+        }
+
+        if (feedbackMode === "immediate") {
+            const correctAnswer = currentDirection === "en-ar"
+                ? arabicWords[currentQuestionIndex]
+                : englishWords[currentQuestionIndex];
+            quizFeedback.textContent += ` Correct answer: ${correctAnswer}`;
+        }
+
+        currentQuestionIndex++;
+        handleNextQuestion();
     }
 });
