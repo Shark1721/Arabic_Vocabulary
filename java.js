@@ -45,21 +45,30 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault(); // Prevent page reload
 
         const userInput = userAnswer.value.trim();
-        const currentDirection = currentQuestionIndex % 2 === 0 ? "en-ar" : "ar-en";  // Toggle direction
-        const isCorrect = (currentDirection === "en-ar")
-            ? userInput === arabicWords[Math.floor(currentQuestionIndex / 2)]
-            : userInput === englishWords[Math.floor(currentQuestionIndex / 2)];
+        const wordIndex = Math.floor(currentQuestionIndex / 2); // Divide by 2 to alternate the word index
+        const currentDirection = currentQuestionIndex % 2 === 0 ? "en-ar" : "ar-en"; // Alternate between directions
+
+        let isCorrect = false;
+        let correctAnswer = "";
+
+        if (currentDirection === "en-ar") {
+            correctAnswer = arabicWords[wordIndex];
+            isCorrect = userInput === correctAnswer;
+        } else if (currentDirection === "ar-en") {
+            correctAnswer = englishWords[wordIndex];
+            isCorrect = userInput === correctAnswer;
+        }
 
         // Feedback
         quizFeedback.textContent = isCorrect ? "Correct!" : "Incorrect!";
         if (!isCorrect) {
-            quizFeedback.textContent += ` Correct answer: ${(currentDirection === "en-ar") ? arabicWords[Math.floor(currentQuestionIndex / 2)] : englishWords[Math.floor(currentQuestionIndex / 2)]}`;
+            quizFeedback.textContent += ` Correct answer: ${correctAnswer}`;
         }
 
         // Store the answer (whether correct or incorrect)
         answers.push({
             question: quizQuestion.textContent,
-            correctAnswer: currentDirection === "en-ar" ? arabicWords[Math.floor(currentQuestionIndex / 2)] : englishWords[Math.floor(currentQuestionIndex / 2)],
+            correctAnswer: correctAnswer,
             userAnswer: userInput,
             isCorrect
         });
