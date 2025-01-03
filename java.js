@@ -124,6 +124,11 @@ document.addEventListener("DOMContentLoaded", () => {
         resultSection.classList.remove("hidden");
         finalScore.textContent = `${score} / ${englishWords.length * 2}`; // Double the score to reflect the number of questions
 
+        // Display corrected answers
+        answers.forEach(answer => {
+            const li = document.createElement("li");
+            li.textContent = `Question: ${answer.question} - Your answer: ${answer.userAnswer} - Correct answer: ${answer.correctAnswer}`;
+            correctAnswersList.appendChild(li);
         });
     }
 });
