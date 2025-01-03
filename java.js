@@ -53,14 +53,9 @@ document.addEventListener("DOMContentLoaded", () => {
             ? userInput === arabicWords[currentQuestionIndex]
             : userInput === englishWords[currentQuestionIndex];
         
-        // Feedback options
+        // Show feedback
         quizFeedback.textContent = isCorrect ? "Correct!" : "Incorrect!";
-
-        // If immediate feedback is selected, show the correct answer
-        if (feedbackOption.value === "immediate" && !isCorrect) {
-            quizFeedback.textContent += ` Correct answer: ${(currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex]}`;
-        }
-
+        
         // Store the answer (whether correct or incorrect)
         answers.push({
             question: quizQuestion.textContent,
@@ -69,11 +64,11 @@ document.addEventListener("DOMContentLoaded", () => {
             isCorrect
         });
 
-        // If feedback option is "immediate", show "Next" button
-        if (feedbackOption.value === "immediate") {
-            nextQuestionBtn.classList.remove("hidden");
+        // If feedback option is "immediate", show the correct answer if incorrect
+        if (feedbackOption.value === "immediate" && !isCorrect) {
+            quizFeedback.textContent += ` Correct answer: ${(currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex]}`;
+            nextQuestionBtn.classList.remove("hidden"); // Show next button
         } else {
-            // Otherwise, automatically go to the next question
             currentQuestionIndex++;
             if (currentQuestionIndex >= englishWords.length) {
                 finishQuiz();
@@ -128,9 +123,8 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         } else if (feedbackOption.value === "none") {
             // Do nothing for feedback
-        } else if (feedbackOption.value === "nofeedback") {
-            // Option 3: Show only the score, not the corrected answers
-            correctAnswersList.innerHTML = "";
+        } else if (feedbackOption.value === "immediate") {
+            // Show nothing extra for feedback option 1
         }
     }
 });
