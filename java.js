@@ -69,11 +69,21 @@ document.addEventListener("DOMContentLoaded", () => {
             isCorrect
         });
 
-        // Enable next button to move to the next question
-        nextQuestionBtn.classList.remove("hidden");
+        // If feedback option is "immediate", show "Next" button
+        if (feedbackOption.value === "immediate") {
+            nextQuestionBtn.classList.remove("hidden");
+        } else {
+            // Otherwise, automatically go to the next question
+            currentQuestionIndex++;
+            if (currentQuestionIndex >= englishWords.length) {
+                finishQuiz();
+            } else {
+                showNextQuestion();
+            }
+        }
     });
 
-    // Next Question button listener
+    // Next Question button listener (only visible for "immediate feedback")
     nextQuestionBtn.addEventListener("click", () => {
         currentQuestionIndex++;
         if (currentQuestionIndex >= englishWords.length) {
@@ -100,6 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ? `Translate to Arabic: ${englishWords[currentQuestionIndex]}`
             : `Translate to English: ${arabicWords[currentQuestionIndex]}`;
         userAnswer.value = "";
+        quizFeedback.textContent = ""; // Clear feedback from previous question
     }
 
     function finishQuiz() {
