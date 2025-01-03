@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let arabicWords = [];
     let currentQuestionIndex = 0;
     let score = 0;
-    let currentDirection;
     let answers = [];
 
     // Start quiz button listener
@@ -85,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
         quizFeedback.textContent = "";
 
         // Proceed to the next question or finish the quiz if the last question
-        if (currentQuestionIndex >= englishWords.length) {
+        if (currentQuestionIndex >= englishWords.length * 2) {  // Double the number of questions for both directions
             finishQuiz();
         } else {
             showNextQuestion();
@@ -102,10 +101,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function showNextQuestion() {
-        currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en"; // Random direction (English to Arabic or vice versa)
+        const wordIndex = Math.floor(currentQuestionIndex / 2); // Divide by 2 to alternate the word index
+        currentDirection = currentQuestionIndex % 2 === 0 ? "en-ar" : "ar-en"; // Alternate between directions
+
         quizQuestion.textContent = currentDirection === "en-ar"
-            ? `Translate to Arabic: ${englishWords[currentQuestionIndex]}`
-            : `Translate to English: ${arabicWords[currentQuestionIndex]}`;
+            ? `Translate to Arabic: ${englishWords[wordIndex]}`
+            : `Translate to English: ${arabicWords[wordIndex]}`;
+        
         userAnswer.value = "";
         quizFeedback.textContent = ""; // Clear feedback from previous question
     }
@@ -113,6 +115,14 @@ document.addEventListener("DOMContentLoaded", () => {
     function finishQuiz() {
         quizSection.classList.add("hidden");
         resultSection.classList.remove("hidden");
-        finalScore.textContent = `${score} / ${englishWords.length}`;
+        finalScore.textContent = `${score} / ${englishWords.length * 2}`; // Double the score to reflect the number of questions
+
+        // Show corrected answers list
+        correctAnswersList.innerHTML = ""; // Clear any existing list
+        answers.forEach(answer => {
+            const li = document.createElement("li");
+            li.textContent = `Question: ${answer.question} - Your answer: ${answer.userAnswer} - Correct answer: ${answer.correctAnswer}`;
+            correctAnswersList.appendChild(li);
+        });
     }
 });
