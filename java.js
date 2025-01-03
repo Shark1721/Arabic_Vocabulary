@@ -19,12 +19,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let score = 0;
     let currentDirection;
     let correctAnswers = [];
+    let feedbackMode;
 
     // Start quiz button listener
     startQuizBtn.addEventListener("click", () => {
-        console.log('Start quiz button clicked');
-
-        // Grab input words and check length
         englishWords = englishInput.value.trim().split("\n");
         arabicWords = arabicInput.value.trim().split("\n");
 
@@ -33,11 +31,11 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Hide setup section and show quiz section
+        feedbackMode = feedbackOption.value;
+
         setupSection.classList.add("hidden");
         quizSection.classList.remove("hidden");
 
-        // Reset quiz
         score = 0;
         currentQuestionIndex = 0;
         correctAnswers = [];
@@ -46,8 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Submit answer button listener
     submitAnswer.addEventListener("click", (event) => {
-        event.preventDefault(); // Prevent page reload
-        console.log('Submit answer button clicked');
+        event.preventDefault();
 
         const userInput = userAnswer.value.trim();
         const isCorrect = (currentDirection === "en-ar")
@@ -61,18 +58,18 @@ document.addEventListener("DOMContentLoaded", () => {
             quizFeedback.textContent = "Incorrect!";
         }
 
-        // Check feedback option
-        if (feedbackOption.value === "immediate") {
-            const correctAnswer = (currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex];
-            correctAnswers.push({ question: quizQuestion.textContent, correctAnswer });
+        if (feedbackMode === "immediate" && !isCorrect) {
+            const correctAnswer = currentDirection === "en-ar"
+                ? arabicWords[currentQuestionIndex]
+                : englishWords[currentQuestionIndex];
             quizFeedback.textContent += ` Correct answer: ${correctAnswer}`;
         }
 
-        currentQuestionIndex++;
-        if (currentQuestionIndex >= englishWords.length) {
-            finishQuiz();
+        if (feedbackMode === "immediate") {
+            submitAnswer.textContent = "Next";
+            submitAnswer.onclick = () => proceedToNext();
         } else {
-            showNextQuestion();
+            proceedToNext();
         }
     });
 
@@ -83,16 +80,25 @@ document.addEventListener("DOMContentLoaded", () => {
         resultSection.classList.add("hidden");
         englishInput.value = "";
         arabicInput.value = "";
-        console.log('Restart quiz button clicked');
     });
 
     function showNextQuestion() {
-        quizFeedback.textContent = ""; // Clear previous feedback
-        currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en"; // Random direction (English to Arabic or vice versa)
+        quizFeedback.textContent = "";
+        submitAnswer.textContent = "Submit";
+        currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en";
         quizQuestion.textContent = currentDirection === "en-ar"
             ? `Translate to Arabic: ${englishWords[currentQuestionIndex]}`
             : `Translate to English: ${arabicWords[currentQuestionIndex]}`;
         userAnswer.value = "";
+    }
+
+    function proceedToNext() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex >= englishWords.length) {
+            finishQuiz();
+        } else {
+            showNextQuestion();
+        }
     }
 
     function finishQuiz() {
@@ -100,10 +106,9 @@ document.addEventListener("DOMContentLoaded", () => {
         resultSection.classList.remove("hidden");
         finalScore.textContent = `${score} / ${englishWords.length}`;
 
-        // Show correct answers if the option is "In the End"
-        if (feedbackOption.value === "end") {
-            let feedbackList = '';
-            correctAnswers.forEach((item) => {
+        if (feedbackMode === "end") {
+            let feedbackList = "";
+            correctAnswers.forEach(item => {
                 feedbackList += `<p>Question: ${item.question} | Correct answer: ${item.correctAnswer}</p>`;
             });
             resultSection.innerHTML += feedbackList;
