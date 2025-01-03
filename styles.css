@@ -10,7 +10,7 @@ body {
     max-width: 500px;
     margin: 20px auto;
     padding: 15px;
-    background: white;
+    background: #f0cfff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
