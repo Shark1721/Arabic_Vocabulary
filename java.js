@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
         finalScore.textContent = `${score} / ${englishWords.length}`;
 
         if (feedbackOption.value === "end") {
-            // Show list of corrected answers
+            // Show list of corrected answers for Option 2 (Feedback at the end)
             correctAnswersList.innerHTML = "";
             answers.forEach(answer => {
                 const li = document.createElement("li");
@@ -128,6 +128,9 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         } else if (feedbackOption.value === "none") {
             // Do nothing for feedback
+        } else if (feedbackOption.value === "nofeedback") {
+            // Option 3: Show only the score, not the corrected answers
+            correctAnswersList.innerHTML = "";
         }
     }
 });
