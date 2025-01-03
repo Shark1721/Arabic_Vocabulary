@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Language Quiz</h1>
+        <h1>Arabic vocabulary practise</h1>
 
         <!-- Setup Section -->
         <div id="setup-section">
@@ -16,20 +16,13 @@
             <textarea id="englishWords" placeholder="English words, one per line"></textarea>
             <textarea id="arabicWords" placeholder="Arabic words, one per line"></textarea>
             
-            <label for="feedbackOption">Choose Feedback Option:</label>
-            <select id="feedbackOption">
-                <option value="immediate">Immediate Feedback</option>
-                <option value="end">Feedback at the End</option>
-                <option value="none">No Feedback</option>
-            </select>
-            
             <button id="startQuiz">Start Quiz</button>
         </div>
 
         <!-- Quiz Section -->
         <div id="quiz-section" class="hidden">
             <h2 id="quiz-question"></h2>
-            <input type="text" id="userAnswer" placeholder="Your answer here">
+            <input type="text" id="userAnswer" placeholder="Write answer here">
             <button id="submitAnswer">Submit</button>
             <p id="quiz-feedback"></p>
             <button id="nextQuestion" class="hidden">Next</button>
@@ -39,7 +32,6 @@
         <div id="result-section" class="hidden">
             <h2>Quiz Complete!</h2>
             <p>Your score is: <span id="finalScore"></span></p>
-            <ul id="correctAnswersList"></ul> <!-- Correct answers list -->
             <button id="restartQuiz">Restart Quiz</button>
         </div>
     </div>
