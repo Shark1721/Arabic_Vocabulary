@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ? userInput === arabicWords[currentQuestionIndex]
             : userInput === englishWords[currentQuestionIndex];
 
-        // Show correct/incorrect feedback
+        // Feedback options
         quizFeedback.textContent = isCorrect ? "Correct!" : "Incorrect!";
 
         // If immediate feedback is selected, show the correct answer
@@ -74,12 +74,9 @@ document.addEventListener("DOMContentLoaded", () => {
             score++;
         }
 
-        // Enable next button to move to the next question
-        nextQuestionBtn.classList.remove("hidden");
-
         // Handle next question behavior
         if (feedbackOption.value === "immediate") {
-            // If feedback is immediate, we wait for the user to click "Next" to proceed
+            nextQuestionBtn.classList.remove("hidden"); // Show "Next" button only in immediate feedback
         } else {
             // Otherwise, automatically go to the next question
             currentQuestionIndex++;
