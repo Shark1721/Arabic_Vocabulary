@@ -10,10 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const submitAnswer = document.getElementById("submitAnswer");
     const quizFeedback = document.getElementById("quiz-feedback");
     const finalScore = document.getElementById("finalScore");
-    const correctAnswersList = document.getElementById("correctAnswersList");
     const restartQuiz = document.getElementById("restartQuiz");
     const nextQuestionBtn = document.getElementById("nextQuestion");
-    const feedbackOption = document.getElementById("feedbackOption");
 
     let englishWords = [];
     let arabicWords = [];
@@ -57,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
         quizFeedback.textContent = isCorrect ? "Correct!" : "Incorrect!";
 
         // If immediate feedback is selected, show the correct answer
-        if (feedbackOption.value === "immediate" && !isCorrect) {
+        if (!isCorrect) {
             quizFeedback.textContent += ` Correct answer: ${(currentDirection === "en-ar") ? arabicWords[currentQuestionIndex] : englishWords[currentQuestionIndex]}`;
         }
 
@@ -74,21 +72,11 @@ document.addEventListener("DOMContentLoaded", () => {
             score++;
         }
 
-        // Handle next question behavior
-        if (feedbackOption.value === "immediate") {
-            nextQuestionBtn.classList.remove("hidden"); // Show "Next" button only in immediate feedback
-        } else {
-            // Otherwise, automatically go to the next question
-            currentQuestionIndex++;
-            if (currentQuestionIndex >= englishWords.length) {
-                finishQuiz();
-            } else {
-                showNextQuestion();
-            }
-        }
+        // Show next button for immediate feedback
+        nextQuestionBtn.classList.remove("hidden");
     });
 
-    // Next Question button listener (only visible for "immediate feedback")
+    // Next Question button listener
     nextQuestionBtn.addEventListener("click", () => {
         currentQuestionIndex++;
 
@@ -126,22 +114,5 @@ document.addEventListener("DOMContentLoaded", () => {
         quizSection.classList.add("hidden");
         resultSection.classList.remove("hidden");
         finalScore.textContent = `${score} / ${englishWords.length}`;
-
-        if (feedbackOption.value === "end") {
-            // Show list of corrected answers
-            correctAnswersList.innerHTML = ""; // Clear any existing list
-            answers.forEach(answer => {
-                if (!answer.isCorrect) {
-                    const li = document.createElement("li");
-                    li.textContent = `Question: ${answer.question} - Your answer: ${answer.userAnswer} - Correct answer: ${answer.correctAnswer}`;
-                    correctAnswersList.appendChild(li);
-                }
-            });
-        } else if (feedbackOption.value === "none") {
-            // Do nothing for feedback, only show score
-        } else if (feedbackOption.value === "immediate") {
-            // For immediate feedback, we already showed answers during the quiz
-            // So, nothing extra is needed here
-        }
     }
 });
