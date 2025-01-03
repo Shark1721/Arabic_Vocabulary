@@ -4,6 +4,7 @@ body {
     padding: 0;
     background-color: #f2d6ff;
     color: #333;
+    text-align: center;
 }
 
 .container {
@@ -40,3 +41,4 @@ button {
 button:hover {
     background-color: #d46ecf;
 }
+
