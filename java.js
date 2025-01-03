@@ -35,28 +35,41 @@ document.addEventListener("DOMContentLoaded", () => {
         userAnswer.value = "";
     }
 
-    startQuizBtn.addEventListener("click", () => {
-        englishWords = englishInput.value.trim().split("\n");
-        arabicWords = arabicInput.value.trim().split("\n");
+    function showNextQuestion() {
+        quizFeedback.textContent = "";
+        currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en";
+        quizQuestion.textContent =
+            currentDirection === "en-ar"
+                ? `Translate to Arabic: ${englishWords[currentQuestionIndex]}`
+                : `Translate to English: ${arabicWords[currentQuestionIndex]}`;
+        userAnswer.value = "";
+        submitAnswer.textContent = "Submit";
+        submitAnswer.onclick = handleAnswerSubmit;
+    }
 
-        if (englishWords.length !== arabicWords.length || englishWords.length === 0) {
-            alert("Both English and Arabic word lists must have the same non-zero length!");
-            return;
+    function finishQuiz() {
+        quizSection.classList.add("hidden");
+        resultSection.classList.remove("hidden");
+
+        finalScore.textContent = `${score} / ${englishWords.length}`;
+
+        if (feedbackMode === "end") {
+            const feedbackHTML = correctAnswers
+                .map(
+                    (item) =>
+                        `<li>${item.question}: Correct Answer - ${item.correctAnswer}</li>`
+                )
+                .join("");
+            correctAnswersList.innerHTML = feedbackHTML;
         }
+    }
 
-        feedbackMode = feedbackOption.value;
-        setupSection.classList.add("hidden");
-        quizSection.classList.remove("hidden");
-
-        resetQuiz();
-        showNextQuestion();
-    });
-
-    submitAnswer.addEventListener("click", () => {
+    function handleAnswerSubmit() {
         const userInput = userAnswer.value.trim();
-        const correctAnswer = currentDirection === "en-ar"
-            ? arabicWords[currentQuestionIndex]
-            : englishWords[currentQuestionIndex];
+        const correctAnswer =
+            currentDirection === "en-ar"
+                ? arabicWords[currentQuestionIndex]
+                : englishWords[currentQuestionIndex];
         const isCorrect = userInput === correctAnswer;
 
         if (isCorrect) {
@@ -69,10 +82,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        if (feedbackMode !== "immediate") {
+        if (feedbackMode !== "no-feedback") {
             correctAnswers.push({
                 question: quizQuestion.textContent,
-                correctAnswer: feedbackMode === "end" ? correctAnswer : null,
+                correctAnswer,
             });
         }
 
@@ -85,39 +98,29 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             showNextQuestion();
         }
+    }
+
+    startQuizBtn.addEventListener("click", () => {
+        englishWords = englishInput.value.trim().split("\n");
+        arabicWords = arabicInput.value.trim().split("\n");
+
+        if (englishWords.length !== arabicWords.length || englishWords.length === 0) {
+            alert("English and Arabic word lists must have the same non-zero length!");
+            return;
+        }
+
+        feedbackMode = feedbackOption.value;
+        setupSection.classList.add("hidden");
+        quizSection.classList.remove("hidden");
+
+        resetQuiz();
+        showNextQuestion();
     });
 
     restartQuiz.addEventListener("click", () => {
-        resetQuiz();
         setupSection.classList.remove("hidden");
         quizSection.classList.add("hidden");
         resultSection.classList.add("hidden");
+        resetQuiz();
     });
-
-    function showNextQuestion() {
-        quizFeedback.textContent = "";
-        submitAnswer.textContent = "Submit";
-        submitAnswer.onclick = () => submitAnswer.click();
-
-        currentDirection = Math.random() < 0.5 ? "en-ar" : "ar-en";
-        quizQuestion.textContent = currentDirection === "en-ar"
-            ? `Translate to Arabic: ${englishWords[currentQuestionIndex]}`
-            : `Translate to English: ${arabicWords[currentQuestionIndex]}`;
-        userAnswer.value = "";
-    }
-
-    function finishQuiz() {
-        quizSection.classList.add("hidden");
-        resultSection.classList.remove("hidden");
-
-        finalScore.textContent = `${score} / ${englishWords.length}`;
-
-        if (feedbackMode === "end") {
-            const feedbackListHTML = correctAnswers.map(
-                ({ question, correctAnswer }) =>
-                    `<li>${question}: ${correctAnswer}</li>`
-            ).join("");
-            correctAnswersList.innerHTML = feedbackListHTML;
-        }
-    }
 });
