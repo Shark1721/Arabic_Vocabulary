@@ -10,7 +10,7 @@ body {
     max-width: 500px;
     margin: 20px auto;
     padding: 15px;
-    background: #f0cfff;
+    background: white;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -28,7 +28,7 @@ textarea, input[type="text"] {
 }
 
 button {
-    background-color: #751de1;
+    background-color: #4CAF50;
     color: white;
     border: none;
     padding: 10px;
@@ -39,5 +39,5 @@ button {
 }
 
 button:hover {
-    background-color: #db649e;
+    background-color: #45a049;
 }
