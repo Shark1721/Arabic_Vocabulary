@@ -1,10 +1,10 @@
 {
     "Prepositions": [
-        { "english": "above", "arabic": "فوق" },
-        { "english": "under", "arabic": "تحت" },
-        { "english": "between", "arabic": "بين" },
-        { "english": "near", "arabic": "قرب" },
-        { "english": "in front of", "arabic": "أمام" }
+        { "english": "on", "arabic": "فوق" },
+        { "english": "at", "arabic": "تحت" },
+        { "english": "to", "arabic": "بين" },
+        { "english": "with", "arabic": "قرب" },
+        { "english": "", "arabic": "أمام" }
     ],
     "Animals": [
         { "english": "cat", "arabic": "قطة" },
@@ -25,14 +25,14 @@
         { "english": "green", "arabic": "سمكة" },
         { "english": "golden", "arabic": "حصان" }
     ],
-     "Animals": [
+     "Adverbs of time": [
         { "english": "cat", "arabic": "قطة" },
         { "english": "dog", "arabic": "كلب" },
         { "english": "bird", "arabic": "طائر" },
         { "english": "fish", "arabic": "سمكة" },
         { "english": "horse", "arabic": "حصان" }
     ],
-    "Animals": [
+    "Adverbs of place": [
         { "english": "cat", "arabic": "قطة" },
         { "english": "dog", "arabic": "كلب" },
         { "english": "bird", "arabic": "طائر" },
