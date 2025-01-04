@@ -3,36 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Language Quiz</title>
+    <title>Arabic</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Arabic vocabulary practise</h1>
+        <h1>Arabic Vocabulary Practice</h1>
 
         <!-- Setup Section -->
         <div id="setup-section">
+            <select id="categorySelect" class="big-button">
+                <option value="" selected disabled>Select a category</option>
+            </select>
             <textarea id="wordsInput" placeholder="Enter word pairs (English,Arabic) on each line"></textarea>
-            <button id="feedbackOption1">With answers</button>
-            <button id="feedbackOption2">Without answers</button>
+            <button id="feedbackOption1" class="big-button">With Answers</button>
+            <button id="feedbackOption2" class="big-button">Without Answers</button>
         </div>
-        <select id="categorySelect">
-            <option value="" selected disabled>Select a category</option>
-        </select>
 
-                <!-- Quiz Section -->
+        <!-- Quiz Section -->
         <div id="quiz-section" class="hidden">
-            <p id="quiz-question"></p>
-            <input id="userAnswer" type="text" placeholder="Enter your answer">
-            <button id="submitAnswer">Submit</button>
+            <p id="quiz-question" class="question-text"></p>
+            <input id="userAnswer" type="text" class="large-input" placeholder="Enter your answer">
+            <button id="submitAnswer" class="big-button">Submit</button>
             <p id="quiz-feedback"></p>
-            <button id="nextQuestion" class="hidden">Next Question</button>
+            <button id="nextQuestion" class="big-button hidden">Next Question</button>
         </div>
 
         <!-- Result Section -->
         <div id="result-section" class="hidden">
             <p id="finalScore"></p>
-            <button id="restartQuiz">Restart Quiz</button>
+            <button id="restartQuiz" class="big-button">Restart Quiz</button>
         </div>
     </div>
 
