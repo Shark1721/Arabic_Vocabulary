@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const categorySelect = document.getElementById("categorySelect");
+    const wordsInput = document.getElementById("wordsInput");
     const feedbackOption1 = document.getElementById("feedbackOption1");
     const feedbackOption2 = document.getElementById("feedbackOption2");
     const quizSection = document.getElementById("quiz-section");
@@ -18,28 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentQuestionIndex = 0;
     let score = 0;
     let selectedFeedbackOption = 1;
-    let categories = {};
 
-    // Fetch categories from the JSON file
-    fetch("words.json")
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Failed to load word categories");
-            }
-            return response.json();
-        })
-        .then(data => {
-            categories = data;
-
-            // Populate category dropdown
-            Object.keys(categories).forEach(category => {
-                const option = document.createElement("option");
-                option.value = category;
-                option.textContent = category;
-                categorySelect.appendChild(option);
-            });
-        })
-        .catch(error => console.error(error));
+    // Responses for correct and incorrect answers
+    const correctResponses = ["Great job!", "Awesome!", "Well done!", "You got it!"];
+    const incorrectResponses = ["Oops! Try again.", "Not quite right.", "Better luck next time!", "Incorrect, but keep going!"];
 
     // Event listeners for starting the quiz
     feedbackOption1.addEventListener("click", () => {
@@ -53,20 +35,27 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function startQuiz() {
-        const selectedCategory = categorySelect.value;
-        if (!selectedCategory || !categories[selectedCategory]) {
-            alert("Please select a valid category.");
+        const inputText = wordsInput.value.trim();
+        if (!inputText) {
+            alert("Please enter word pairs.");
             return;
         }
 
-        // Load word pairs for the selected category
-        wordPairs = categories[selectedCategory];
+        // Parse word pairs
+        wordPairs = inputText.split("\n").map(line => {
+            const [english, arabic] = line.split(",").map(word => word.trim());
+            if (!english || !arabic) {
+                alert("Invalid format. Ensure each line has an English and Arabic word separated by a comma.");
+                throw new Error("Invalid input format.");
+            }
+            return { english, arabic };
+        });
 
         // Generate questions randomly
         questions = [];
         wordPairs.forEach(pair => {
-            questions.push({ question: `Translate: ${pair.english}`, correctAnswer: pair.arabic });
-            questions.push({ question: `Translate: ${pair.arabic}`, correctAnswer: pair.english });
+            questions.push({ question: `Translate to Arabic: ${pair.english}`, correctAnswer: pair.arabic });
+            questions.push({ question: `Translate to English: ${pair.arabic}`, correctAnswer: pair.english });
         });
         questions = shuffleArray(questions);
 
@@ -90,16 +79,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const currentQuestion = questions[currentQuestionIndex];
+        const isCorrect = userInput === currentQuestion.correctAnswer;
 
-        if (selectedFeedbackOption === 1) {
-            const isCorrect = userInput === currentQuestion.correctAnswer;
-            quizFeedback.textContent = isCorrect ? "Awesome!" : `Not awesome! Correct answer: ${currentQuestion.correctAnswer}`;
-            if (isCorrect) score++;
-        } else if (selectedFeedbackOption === 2) {
-            const isCorrect = userInput.toLowerCase() === currentQuestion.correctAnswer.toLowerCase();
-            quizFeedback.textContent = isCorrect ? "Awesomesauce!" : "Evilsauce.";
-            if (isCorrect) score++;
-        }
+        // Select a random response based on correctness
+        const response = isCorrect
+            ? correctResponses[Math.floor(Math.random() * correctResponses.length)]
+            : incorrectResponses[Math.floor(Math.random() * incorrectResponses.length)];
+
+        quizFeedback.textContent = response;
+        if (isCorrect) score++;
 
         nextQuestionBtn.classList.remove("hidden");
         submitAnswer.disabled = true; // Disable submit button until the next question
@@ -126,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setupSection.classList.remove("hidden");
         quizSection.classList.add("hidden");
         resultSection.classList.add("hidden");
-        categorySelect.value = ""; // Reset category selection
+        wordsInput.value = "";
     });
 
     function showNextQuestion() {
