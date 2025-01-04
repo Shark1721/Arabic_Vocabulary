@@ -12,7 +12,7 @@
         { "english": "bird", "arabic": "طائر" },
         { "english": "fish", "arabic": "سمكة" },
         { "english": "horse", "arabic": "حصان" }
-    ]
+    ],
      "Colors": [
         { "english": "blue", "arabic": "قطة" },
         { "english": "yellow", "arabic": "كلب" },
@@ -24,26 +24,26 @@
         { "english": "orange", "arabic": "طائر" },
         { "english": "green", "arabic": "سمكة" },
         { "english": "golden", "arabic": "حصان" }
-    ]
+    ],
      "Animals": [
         { "english": "cat", "arabic": "قطة" },
         { "english": "dog", "arabic": "كلب" },
         { "english": "bird", "arabic": "طائر" },
         { "english": "fish", "arabic": "سمكة" },
         { "english": "horse", "arabic": "حصان" }
-    ]
+    ],
     "Animals": [
         { "english": "cat", "arabic": "قطة" },
         { "english": "dog", "arabic": "كلب" },
         { "english": "bird", "arabic": "طائر" },
         { "english": "fish", "arabic": "سمكة" },
         { "english": "horse", "arabic": "حصان" }
-    ]
+    ],
     "Animals": [
         { "english": "cat", "arabic": "قطة" },
         { "english": "dog", "arabic": "كلب" },
         { "english": "bird", "arabic": "طائر" },
         { "english": "fish", "arabic": "سمكة" },
         { "english": "horse", "arabic": "حصان" }
-    ]
+    ],
 }
