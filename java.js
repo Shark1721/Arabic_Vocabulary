@@ -20,8 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let selectedFeedbackOption = 1;
 
     // Responses for correct and incorrect answers
-    const correctResponses = ["Great job!", "Awesome!", "Well done!", "You got it!"];
-    const incorrectResponses = ["Oops! Try again.", "Not quite right.", "Better luck next time!", "Incorrect, but keep going!"];
+    const correctResponses = ["Skibidi!", "Awesome!", "Sauce!", "Blossom!","Awesomesauce!","Smucho sauce"];
+    const incorrectResponses = ["Evilsauce.", "No.", "Wrong.", "Get better.", "No, no, no", "Not crrect"];
 
     // Event listeners for starting the quiz
     feedbackOption1.addEventListener("click", () => {
