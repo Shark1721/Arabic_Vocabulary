@@ -39,7 +39,7 @@
         { "english": "fish", "arabic": "سمكة" },
         { "english": "horse", "arabic": "حصان" }
     ],
-    "Animals": [
+    "minnanu": [
         { "english": "cat", "arabic": "قطة" },
         { "english": "dog", "arabic": "كلب" },
         { "english": "bird", "arabic": "طائر" },
