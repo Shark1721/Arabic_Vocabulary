@@ -18,7 +18,7 @@
         { "english": "yellow", "arabic": "كلب" },
         { "english": "red", "arabic": "طائر" },
         { "english": "black", "arabic": "سمكة" },
-        { "english": "purple", "arabic": "حصان" }
+        { "english": "purple", "arabic": "حصان" },
         { "english": "white", "arabic": "قطة" },
         { "english": "pink", "arabic": "كلب" },
         { "english": "orange", "arabic": "طائر" },
@@ -45,5 +45,5 @@
         { "english": "bird", "arabic": "طائر" },
         { "english": "fish", "arabic": "سمكة" },
         { "english": "horse", "arabic": "حصان" }
-    ],
+    ]
 }
