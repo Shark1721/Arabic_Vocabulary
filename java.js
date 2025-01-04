@@ -68,9 +68,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const userInput = userAnswer.value.trim();
         const currentQuestion = questions[currentQuestionIndex];
 
-        const isCorrect = userInput === currentQuestion.correctAnswer;
-        quizFeedback.textContent = isCorrect ? "Correct!" : `Incorrect! Correct answer: ${currentQuestion.correctAnswer}`;
-        if (isCorrect) score++;
+        if (selectedFeedbackOption === 1) {
+            // Logic for Feedback Option 1
+            const isCorrect = userInput === currentQuestion.correctAnswer;
+            quizFeedback.textContent = isCorrect ? "Correct!" : `Incorrect! Correct answer: ${currentQuestion.correctAnswer}`;
+            if (isCorrect) score++;
+        } else if (selectedFeedbackOption === 2) {
+            // Logic for Feedback Option 2 (can modify as needed)
+            const isCorrect = userInput.toLowerCase() === currentQuestion.correctAnswer.toLowerCase();
+            quizFeedback.textContent = isCorrect ? "Great Job!" : `Oops! The correct answer is: ${currentQuestion.correctAnswer}`;
+            if (isCorrect) score++;
+        }
 
         // Show Next button
         nextQuestionBtn.classList.remove("hidden");
