@@ -4,7 +4,7 @@
         { "english": "at", "arabic": "تحت" },
         { "english": "to", "arabic": "بين" },
         { "english": "with", "arabic": "قرب" },
-        { "english": "", "arabic": "أمام" }
+        { "english": "by", "arabic": "أمام" }
     ],
     "Animals": [
         { "english": "cat", "arabic": "قطة" },
