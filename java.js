@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const categorySelect = document.getElementById("categorySelect");
     const wordsInput = document.getElementById("wordsInput");
-    const feedbackOption1 = document.getElementById("feedbackOption1");
-    const feedbackOption2 = document.getElementById("feedbackOption2");
     const quizSection = document.getElementById("quiz-section");
     const setupSection = document.getElementById("setup-section");
     const resultSection = document.getElementById("result-section");
@@ -17,40 +16,50 @@ document.addEventListener("DOMContentLoaded", () => {
     let questions = [];
     let currentQuestionIndex = 0;
     let score = 0;
-    let selectedFeedbackOption = 1;
 
-    // Responses for correct and incorrect answers
-    const correctResponses = ["Skibidi!", "Awesome!", "Sauce!", "Blossom!","Awesomesauce!","Smucho sauce"];
-    const incorrectResponses = ["Evilsauce.", "No.", "Wrong.", "Get better.", "No, no, no", "Not crrect"];
+    const correctResponses = ["Well done!", "Great job!", "You're amazing!"];
+    const incorrectResponses = ["Oops! Try again.", "Better luck next time!", "Not quite right."];
 
-    // Event listeners for starting the quiz
-    feedbackOption1.addEventListener("click", () => {
-        selectedFeedbackOption = 1;
-        startQuiz();
-    });
+    // Load categories from JSON
+    fetch("categories.json")
+        .then(response => response.json())
+        .then(data => {
+            for (const category in data) {
+                const option = document.createElement("option");
+                option.value = category;
+                option.textContent = category;
+                categorySelect.appendChild(option);
+            }
+        })
+        .catch(error => {
+            console.error("Error loading categories:", error);
+            alert("Failed to load categories. Please try again.");
+        });
 
-    feedbackOption2.addEventListener("click", () => {
-        selectedFeedbackOption = 2;
-        startQuiz();
+    // Handle category selection
+    categorySelect.addEventListener("change", () => {
+        const selectedCategory = categorySelect.value;
+
+        if (!selectedCategory) return;
+
+        // Fetch word pairs for the selected category
+        fetch("categories.json")
+            .then(response => response.json())
+            .then(data => {
+                wordPairs = data[selectedCategory];
+                if (!wordPairs || wordPairs.length === 0) {
+                    alert("No words available for this category.");
+                    return;
+                }
+                startQuiz();
+            })
+            .catch(error => {
+                console.error("Error loading word pairs:", error);
+                alert("Failed to load words. Please try again.");
+            });
     });
 
     function startQuiz() {
-        const inputText = wordsInput.value.trim();
-        if (!inputText) {
-            alert("Please enter word pairs.");
-            return;
-        }
-
-        // Parse word pairs
-        wordPairs = inputText.split("\n").map(line => {
-            const [english, arabic] = line.split(",").map(word => word.trim());
-            if (!english || !arabic) {
-                alert("Invalid format. Ensure each line has an English and Arabic word separated by a comma.");
-                throw new Error("Invalid input format.");
-            }
-            return { english, arabic };
-        });
-
         // Generate questions randomly
         questions = [];
         wordPairs.forEach(pair => {
@@ -67,55 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
         score = 0;
         showNextQuestion();
     }
-
-    // Submit answer button listener
-    submitAnswer.addEventListener("click", (event) => {
-        event.preventDefault(); // Prevent form submission
-
-        const userInput = userAnswer.value.trim();
-        if (!userInput) {
-            alert("Please provide an answer.");
-            return;
-        }
-
-        const currentQuestion = questions[currentQuestionIndex];
-        const isCorrect = userInput === currentQuestion.correctAnswer;
-
-        // Select a random response based on correctness
-        const response = isCorrect
-            ? correctResponses[Math.floor(Math.random() * correctResponses.length)]
-            : incorrectResponses[Math.floor(Math.random() * incorrectResponses.length)];
-
-        quizFeedback.textContent = response;
-        if (isCorrect) score++;
-
-        nextQuestionBtn.classList.remove("hidden");
-        submitAnswer.disabled = true; // Disable submit button until the next question
-    });
-
-    // Next Question button listener
-    nextQuestionBtn.addEventListener("click", () => {
-        currentQuestionIndex++;
-
-        // Reset for the next question
-        nextQuestionBtn.classList.add("hidden");
-        quizFeedback.textContent = "";
-        submitAnswer.disabled = false;
-
-        if (currentQuestionIndex >= questions.length) {
-            finishQuiz();
-        } else {
-            showNextQuestion();
-        }
-    });
-
-    // Restart quiz button listener
-    restartQuiz.addEventListener("click", () => {
-        setupSection.classList.remove("hidden");
-        quizSection.classList.add("hidden");
-        resultSection.classList.add("hidden");
-        wordsInput.value = "";
-    });
 
     function showNextQuestion() {
         const currentQuestion = questions[currentQuestionIndex];
