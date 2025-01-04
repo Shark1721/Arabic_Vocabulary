@@ -14,9 +14,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let englishWords = [];
     let arabicWords = [];
-    let currentQuestionIndex = 0;
     let score = 0;
     let answers = [];
+    let questionOrder = [];
+    let currentQuestionIndex = 0;
+
+    // Utility to shuffle an array
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
 
     // Start quiz button listener
     startQuizBtn.addEventListener("click", () => {
@@ -28,6 +38,14 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("English and Arabic word lists must have the same length!");
             return;
         }
+
+        // Generate randomized question order
+        questionOrder = [];
+        for (let i = 0; i < englishWords.length; i++) {
+            questionOrder.push({ index: i, direction: "en-ar" }); // English to Arabic
+            questionOrder.push({ index: i, direction: "ar-en" }); // Arabic to English
+        }
+        questionOrder = shuffleArray(questionOrder); // Shuffle the questions
 
         // Hide setup section and show quiz section
         setupSection.classList.add("hidden");
@@ -45,17 +63,15 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault(); // Prevent page reload
 
         const userInput = userAnswer.value.trim();
-        const wordIndex = Math.floor(currentQuestionIndex / 2); // Divide by 2 to alternate the word index
-        const currentDirection = currentQuestionIndex % 2 === 0 ? "en-ar" : "ar-en"; // Alternate between directions
-
+        const { index, direction } = questionOrder[currentQuestionIndex];
         let isCorrect = false;
         let correctAnswer = "";
 
-        if (currentDirection === "en-ar") {
-            correctAnswer = arabicWords[wordIndex];
+        if (direction === "en-ar") {
+            correctAnswer = arabicWords[index];
             isCorrect = userInput === correctAnswer;
-        } else if (currentDirection === "ar-en") {
-            correctAnswer = englishWords[wordIndex];
+        } else if (direction === "ar-en") {
+            correctAnswer = englishWords[index];
             isCorrect = userInput === correctAnswer;
         }
 
@@ -91,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
         quizFeedback.textContent = "";
 
         // Proceed to the next question or finish the quiz if the last question
-        if (currentQuestionIndex >= englishWords.length * 2) {  // Double the number of questions for both directions
+        if (currentQuestionIndex >= questionOrder.length) {
             finishQuiz();
         } else {
             showNextQuestion();
@@ -108,12 +124,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function showNextQuestion() {
-        const wordIndex = Math.floor(currentQuestionIndex / 2); // Divide by 2 to alternate the word index
-        const currentDirection = currentQuestionIndex % 2 === 0 ? "en-ar" : "ar-en"; // Alternate between directions
+        const { index, direction } = questionOrder[currentQuestionIndex];
 
-        quizQuestion.textContent = currentDirection === "en-ar"
-            ? `Translate to Arabic: ${englishWords[wordIndex]}`
-            : `Translate to English: ${arabicWords[wordIndex]}`;
+        quizQuestion.textContent = direction === "en-ar"
+            ? `Translate to Arabic: ${englishWords[index]}`
+            : `Translate to English: ${arabicWords[index]}`;
         
         userAnswer.value = "";
         quizFeedback.textContent = ""; // Clear feedback from previous question
@@ -122,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function finishQuiz() {
         quizSection.classList.add("hidden");
         resultSection.classList.remove("hidden");
-        finalScore.textContent = `${score} / ${englishWords.length * 2}`; // Double the score to reflect the number of questions
+        finalScore.textContent = `${score} / ${questionOrder.length}`;
 
         // Display corrected answers
         answers.forEach(answer => {
