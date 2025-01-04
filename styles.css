@@ -30,7 +30,7 @@ textarea, input[type="text"] {
 button {
     background-color: #802f9c;
     color: white;
-    border: none;
+    border: #440c57;
     padding: 10px;
     width: 100%;
     font-size: 1em;
