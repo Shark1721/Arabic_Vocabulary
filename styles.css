@@ -28,6 +28,7 @@ textarea, input[type="text"] {
     padding: 10px;
     font-size: 1.2em;
     box-sizing: border-box;
+    height: 100px;
 }
 
 textarea {
