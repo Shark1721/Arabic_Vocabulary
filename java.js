@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (selectedFeedbackOption === 2) {
             // Logic for Feedback Option 2 (can modify as needed)
             const isCorrect = userInput.toLowerCase() === currentQuestion.correctAnswer.toLowerCase();
-            quizFeedback.textContent = isCorrect ? "Great Job!" : `Oops! The correct answer is: ${currentQuestion.correctAnswer}`;
+            quizFeedback.textContent = isCorrect ? "Awesomesauce!" : "Evilsauce.";
             if (isCorrect) score++;
         }
 
