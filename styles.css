@@ -36,19 +36,18 @@ textarea {
 
 /* Category Select Button */
 .category-select {
-    background-color: #ff9e57;
+    background-color: #b746eb;
     color: white;
-    padding: 15px;
+    padding: 10px;
     font-size: 1.3em;
     border-radius: 8px;
     border: none;
     margin-bottom: 15px;
     cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .category-select:hover {
-    background-color: #ff7a24;
+    background-color: #d46ecf;
 }
 
 /* Option Buttons (Feedback Options) */
