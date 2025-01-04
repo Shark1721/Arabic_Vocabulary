@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const wordsInput = document.getElementById("wordsInput");
-    const startQuizBtn = document.getElementById("startQuiz");
+    const feedbackOption1 = document.getElementById("feedbackOption1");
+    const feedbackOption2 = document.getElementById("feedbackOption2");
     const quizSection = document.getElementById("quiz-section");
     const setupSection = document.getElementById("setup-section");
     const quizQuestion = document.getElementById("quiz-question");
@@ -15,8 +16,17 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentQuestionIndex = 0;
     let score = 0;
 
-    // Start Quiz Button
-    startQuizBtn.addEventListener("click", () => {
+    // Start Quiz Button (Feedback Option 1)
+    feedbackOption1.addEventListener("click", () => {
+        startQuiz();
+    });
+
+    // Start Quiz Button (Feedback Option 2)
+    feedbackOption2.addEventListener("click", () => {
+        startQuiz();
+    });
+
+    function startQuiz() {
         const inputText = wordsInput.value.trim();
         if (!inputText) {
             alert("Please enter word pairs.");
@@ -47,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
         currentQuestionIndex = 0;
         score = 0;
         showNextQuestion();
-    });
+    }
 
     // Submit Answer Button
     submitAnswer.addEventListener("click", (event) => {
@@ -66,6 +76,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Next Question Button
     nextQuestionBtn.addEventListener("click", () => {
         currentQuestionIndex++;
+
+        // Proceed to the next question or finish the quiz
         if (currentQuestionIndex >= questions.length) {
             finishQuiz();
         } else {
