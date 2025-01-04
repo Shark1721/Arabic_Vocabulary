@@ -12,11 +12,18 @@
 
         <!-- Setup Section -->
         <div id="setup-section">
-            <h2>Enter Words</h2>
-            <textarea id="wordsInput" rows="10" placeholder="Enter word pairs (e.g., hello,مرحبا)"></textarea>
-            
-            <button id="startQuiz">Start Quiz</button>
+            <textarea id="wordsInput" placeholder="Enter word pairs (English,Arabic) on each line"></textarea>
+            <button id="feedbackOption1">Start Quiz - Option 1</button>
+            <button id="feedbackOption2">Start Quiz - Option 2</button>
         </div>
+        <div id="quiz-section" class="hidden">
+            <p id="quiz-question"></p>
+            <input id="userAnswer" type="text" placeholder="Enter your answer">
+            <button id="submitAnswer">Submit</button>
+            <p id="quiz-feedback"></p>
+            <button id="nextQuestion" class="hidden">Next Question</button>
+        </div>
+
 
         <!-- Quiz Section -->
         <div id="quiz-section" class="hidden">
