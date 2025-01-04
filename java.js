@@ -65,8 +65,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // Generate questions randomly
         questions = [];
         wordPairs.forEach(pair => {
-            questions.push({ question: `Translate to Arabic: ${pair.english}`, correctAnswer: pair.arabic });
-            questions.push({ question: `Translate to English: ${pair.arabic}`, correctAnswer: pair.english });
+            questions.push({ question: `Translate: ${pair.english}`, correctAnswer: pair.arabic });
+            questions.push({ question: `Translate: ${pair.arabic}`, correctAnswer: pair.english });
         });
         questions = shuffleArray(questions);
 
@@ -93,11 +93,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (selectedFeedbackOption === 1) {
             const isCorrect = userInput === currentQuestion.correctAnswer;
-            quizFeedback.textContent = isCorrect ? "Correct!" : `Incorrect! Correct answer: ${currentQuestion.correctAnswer}`;
+            quizFeedback.textContent = isCorrect ? "Awesome!" : `Not awesome! Correct answer: ${currentQuestion.correctAnswer}`;
             if (isCorrect) score++;
         } else if (selectedFeedbackOption === 2) {
             const isCorrect = userInput.toLowerCase() === currentQuestion.correctAnswer.toLowerCase();
-            quizFeedback.textContent = isCorrect ? "Well done!" : `Incorrect! The correct answer is: ${currentQuestion.correctAnswer}`;
+            quizFeedback.textContent = isCorrect ? "Awesomesauce!" : "Evilsauce.";
             if (isCorrect) score++;
         }
 
