@@ -1,0 +1,16 @@
+{
+    "Prepositions": [
+        { "english": "above", "arabic": "فوق" },
+        { "english": "under", "arabic": "تحت" },
+        { "english": "between", "arabic": "بين" },
+        { "english": "near", "arabic": "قرب" },
+        { "english": "in front of", "arabic": "أمام" }
+    ],
+    "Animals": [
+        { "english": "cat", "arabic": "قطة" },
+        { "english": "dog", "arabic": "كلب" },
+        { "english": "bird", "arabic": "طائر" },
+        { "english": "fish", "arabic": "سمكة" },
+        { "english": "horse", "arabic": "حصان" }
+    ]
+}
