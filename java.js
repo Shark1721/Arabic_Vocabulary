@@ -4,12 +4,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const feedbackOption2 = document.getElementById("feedbackOption2");
     const quizSection = document.getElementById("quiz-section");
     const setupSection = document.getElementById("setup-section");
+    const resultSection = document.getElementById("result-section");
     const quizQuestion = document.getElementById("quiz-question");
     const userAnswer = document.getElementById("userAnswer");
     const submitAnswer = document.getElementById("submitAnswer");
     const quizFeedback = document.getElementById("quiz-feedback");
     const nextQuestionBtn = document.getElementById("nextQuestion");
     const finalScore = document.getElementById("finalScore");
+    const restartQuiz = document.getElementById("restartQuiz");
 
     let wordPairs = [];
     let questions = [];
@@ -54,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Start quiz
         setupSection.classList.add("hidden");
         quizSection.classList.remove("hidden");
+        resultSection.classList.add("hidden");
         currentQuestionIndex = 0;
         score = 0;
         showNextQuestion();
@@ -77,12 +80,24 @@ document.addEventListener("DOMContentLoaded", () => {
     nextQuestionBtn.addEventListener("click", () => {
         currentQuestionIndex++;
 
+        // Hide the next button and feedback message for now
+        nextQuestionBtn.classList.add("hidden");
+        quizFeedback.textContent = "";
+
         // Proceed to the next question or finish the quiz
         if (currentQuestionIndex >= questions.length) {
             finishQuiz();
         } else {
             showNextQuestion();
         }
+    });
+
+    // Restart Quiz Button
+    restartQuiz.addEventListener("click", () => {
+        setupSection.classList.remove("hidden");
+        quizSection.classList.add("hidden");
+        resultSection.classList.add("hidden");
+        wordsInput.value = "";
     });
 
     function showNextQuestion() {
@@ -95,7 +110,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function finishQuiz() {
         quizSection.classList.add("hidden");
-        alert(`Quiz finished! Your score: ${score} / ${questions.length}`);
+        resultSection.classList.remove("hidden");
+        finalScore.textContent = `Your Score: ${score} / ${questions.length}`;
     }
 
     function shuffleArray(array) {
