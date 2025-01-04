@@ -1,49 +1,12 @@
 {
     "Prepositions": [
-        { "english": "on", "arabic": "فوق" },
-        { "english": "at", "arabic": "تحت" },
-        { "english": "to", "arabic": "بين" },
-        { "english": "with", "arabic": "قرب" },
-        { "english": "by", "arabic": "أمام" }
+        { "english": "on", "arabic": "على" },
+        { "english": "under", "arabic": "تحت" },
+        { "english": "beside", "arabic": "بجانب" }
     ],
-    "Animals": [
-        { "english": "cat", "arabic": "قطة" },
-        { "english": "dog", "arabic": "كلب" },
-        { "english": "bird", "arabic": "طائر" },
-        { "english": "fish", "arabic": "سمكة" },
-        { "english": "horse", "arabic": "حصان" }
-    ],
-     "Colors": [
-        { "english": "blue", "arabic": "قطة" },
-        { "english": "yellow", "arabic": "كلب" },
-        { "english": "red", "arabic": "طائر" },
-        { "english": "black", "arabic": "سمكة" },
-        { "english": "purple", "arabic": "حصان" },
-        { "english": "white", "arabic": "قطة" },
-        { "english": "pink", "arabic": "كلب" },
-        { "english": "orange", "arabic": "طائر" },
-        { "english": "green", "arabic": "سمكة" },
-        { "english": "golden", "arabic": "حصان" }
-    ],
-     "Adverbs of time": [
-        { "english": "cat", "arabic": "قطة" },
-        { "english": "dog", "arabic": "كلب" },
-        { "english": "bird", "arabic": "طائر" },
-        { "english": "fish", "arabic": "سمكة" },
-        { "english": "horse", "arabic": "حصان" }
-    ],
-    "Adverbs of place": [
-        { "english": "cat", "arabic": "قطة" },
-        { "english": "dog", "arabic": "كلب" },
-        { "english": "bird", "arabic": "طائر" },
-        { "english": "fish", "arabic": "سمكة" },
-        { "english": "horse", "arabic": "حصان" }
-    ],
-    "minnanu": [
-        { "english": "cat", "arabic": "قطة" },
-        { "english": "dog", "arabic": "كلب" },
-        { "english": "bird", "arabic": "طائر" },
-        { "english": "fish", "arabic": "سمكة" },
-        { "english": "horse", "arabic": "حصان" }
+    "Colors": [
+        { "english": "red", "arabic": "أحمر" },
+        { "english": "blue", "arabic": "أزرق" },
+        { "english": "green", "arabic": "أخضر" }
     ]
 }
