@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const wordsInput = document.getElementById("wordsInput");
+    const categorySelect = document.getElementById("categorySelect");
     const feedbackOption1 = document.getElementById("feedbackOption1");
     const feedbackOption2 = document.getElementById("feedbackOption2");
     const quizSection = document.getElementById("quiz-section");
@@ -18,6 +18,28 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentQuestionIndex = 0;
     let score = 0;
     let selectedFeedbackOption = 1;
+    let categories = {};
+
+    // Fetch categories from the JSON file
+    fetch("words.json")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to load word categories");
+            }
+            return response.json();
+        })
+        .then(data => {
+            categories = data;
+
+            // Populate category dropdown
+            Object.keys(categories).forEach(category => {
+                const option = document.createElement("option");
+                option.value = category;
+                option.textContent = category;
+                categorySelect.appendChild(option);
+            });
+        })
+        .catch(error => console.error(error));
 
     // Event listeners for starting the quiz
     feedbackOption1.addEventListener("click", () => {
@@ -31,21 +53,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function startQuiz() {
-        const inputText = wordsInput.value.trim();
-        if (!inputText) {
-            alert("Please enter word pairs.");
+        const selectedCategory = categorySelect.value;
+        if (!selectedCategory || !categories[selectedCategory]) {
+            alert("Please select a valid category.");
             return;
         }
 
-        // Parse word pairs
-        wordPairs = inputText.split("\n").map(line => {
-            const [english, arabic] = line.split(",").map(word => word.trim());
-            if (!english || !arabic) {
-                alert("Invalid format. Ensure each line has an English and Arabic word separated by a comma.");
-                throw new Error("Invalid input format.");
-            }
-            return { english, arabic };
-        });
+        // Load word pairs for the selected category
+        wordPairs = categories[selectedCategory];
 
         // Generate questions randomly
         questions = [];
@@ -82,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (isCorrect) score++;
         } else if (selectedFeedbackOption === 2) {
             const isCorrect = userInput.toLowerCase() === currentQuestion.correctAnswer.toLowerCase();
-            quizFeedback.textContent = isCorrect ? "Awesomesauce!" : "Evilsauce.";
+            quizFeedback.textContent = isCorrect ? "Well done!" : `Incorrect! The correct answer is: ${currentQuestion.correctAnswer}`;
             if (isCorrect) score++;
         }
 
@@ -111,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setupSection.classList.remove("hidden");
         quizSection.classList.add("hidden");
         resultSection.classList.add("hidden");
-        wordsInput.value = "";
+        categorySelect.value = ""; // Reset category selection
     });
 
     function showNextQuestion() {
