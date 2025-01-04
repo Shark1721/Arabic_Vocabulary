@@ -14,7 +14,6 @@ body {
     background: #b592d1;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    height: 100%;
 }
 
 .hidden {
@@ -29,13 +28,46 @@ textarea, input[type="text"] {
     padding: 10px;
     font-size: 1.2em;
     box-sizing: border-box;
-    height: 100px;
 }
 
 textarea {
     height: 100px;
 }
 
+/* Category Select Button */
+.category-select {
+    background-color: #ff9e57;
+    color: white;
+    padding: 15px;
+    font-size: 1.3em;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 15px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.category-select:hover {
+    background-color: #ff7a24;
+}
+
+/* Option Buttons (Feedback Options) */
+.option-button {
+    background-color: #802f9c;
+    color: white;
+    padding: 12px;
+    font-size: 1.2em;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    margin: 10px 5px;
+}
+
+.option-button:hover {
+    background-color: #d46ecf;
+}
+
+/* General Buttons */
 .big-button {
     background-color: #802f9c;
     color: white;
@@ -51,6 +83,7 @@ textarea {
     background-color: #d46ecf;
 }
 
+/* Answer Input Field */
 .large-input {
     font-size: 1.5em;
     padding: 12px;
@@ -58,8 +91,9 @@ textarea {
     border-radius: 5px;
 }
 
+/* Question Text */
 .question-text {
-    font-size: 2em;
+    font-size: 4em;
     font-weight: bold;
     margin-bottom: 20px;
 }
