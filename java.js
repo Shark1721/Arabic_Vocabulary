@@ -17,14 +17,16 @@ document.addEventListener("DOMContentLoaded", () => {
     let questions = [];
     let currentQuestionIndex = 0;
     let score = 0;
+    let selectedFeedbackOption = 1;
 
-    // Start Quiz Button (Feedback Option 1)
+    // Event listeners for starting the quiz
     feedbackOption1.addEventListener("click", () => {
+        selectedFeedbackOption = 1;
         startQuiz();
     });
 
-    // Start Quiz Button (Feedback Option 2)
     feedbackOption2.addEventListener("click", () => {
+        selectedFeedbackOption = 2;
         startQuiz();
     });
 
@@ -53,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         questions = shuffleArray(questions);
 
-        // Start quiz
+        // Initialize quiz
         setupSection.classList.add("hidden");
         quizSection.classList.remove("hidden");
         resultSection.classList.add("hidden");
@@ -62,37 +64,41 @@ document.addEventListener("DOMContentLoaded", () => {
         showNextQuestion();
     }
 
-    // Submit Answer Button
+    // Submit answer button listener
     submitAnswer.addEventListener("click", (event) => {
-        event.preventDefault();
+        event.preventDefault(); // Prevent form submission
+
         const userInput = userAnswer.value.trim();
+        if (!userInput) {
+            alert("Please provide an answer.");
+            return;
+        }
+
         const currentQuestion = questions[currentQuestionIndex];
 
         if (selectedFeedbackOption === 1) {
-            // Logic for Feedback Option 1
             const isCorrect = userInput === currentQuestion.correctAnswer;
             quizFeedback.textContent = isCorrect ? "Correct!" : `Incorrect! Correct answer: ${currentQuestion.correctAnswer}`;
             if (isCorrect) score++;
         } else if (selectedFeedbackOption === 2) {
-            // Logic for Feedback Option 2 (can modify as needed)
             const isCorrect = userInput.toLowerCase() === currentQuestion.correctAnswer.toLowerCase();
             quizFeedback.textContent = isCorrect ? "Awesomesauce!" : "Evilsauce.";
             if (isCorrect) score++;
         }
 
-        // Show Next button
         nextQuestionBtn.classList.remove("hidden");
+        submitAnswer.disabled = true; // Disable submit button until the next question
     });
 
-    // Next Question Button
+    // Next Question button listener
     nextQuestionBtn.addEventListener("click", () => {
         currentQuestionIndex++;
 
-        // Hide the next button and feedback message for now
+        // Reset for the next question
         nextQuestionBtn.classList.add("hidden");
         quizFeedback.textContent = "";
+        submitAnswer.disabled = false;
 
-        // Proceed to the next question or finish the quiz
         if (currentQuestionIndex >= questions.length) {
             finishQuiz();
         } else {
@@ -100,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Restart Quiz Button
+    // Restart quiz button listener
     restartQuiz.addEventListener("click", () => {
         setupSection.classList.remove("hidden");
         quizSection.classList.add("hidden");
