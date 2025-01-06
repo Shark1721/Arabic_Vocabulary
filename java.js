@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // Fetch word pairs for the selected category
-        fetch("categories.json")
+        fetch("words.json")
             .then(response => response.json())
             .then(data => {
                 wordPairs = data[selectedCategory];
