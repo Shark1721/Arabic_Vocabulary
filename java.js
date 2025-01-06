@@ -1,49 +1,51 @@
 document.addEventListener("DOMContentLoaded", () => {
     const categorySelect = document.getElementById("categorySelect");
-    const wordsInput = document.getElementById("wordsInput");
     const quizSection = document.getElementById("quiz-section");
     const setupSection = document.getElementById("setup-section");
-    const resultSection = document.getElementById("result-section");
     const quizQuestion = document.getElementById("quiz-question");
     const userAnswer = document.getElementById("userAnswer");
     const submitAnswer = document.getElementById("submitAnswer");
     const quizFeedback = document.getElementById("quiz-feedback");
     const nextQuestionBtn = document.getElementById("nextQuestion");
     const finalScore = document.getElementById("finalScore");
-    const restartQuiz = document.getElementById("restartQuiz");
+    const resultSection = document.getElementById("result-section");
 
     let wordPairs = [];
     let questions = [];
     let currentQuestionIndex = 0;
     let score = 0;
 
-    const correctResponses = ["Well done!", "Great job!", "You're amazing!"];
-    const incorrectResponses = ["Oops! Try again.", "Better luck next time!", "Not quite right."];
-
     // Load categories from JSON
     fetch("words.json")
         .then(response => response.json())
         .then(data => {
-            for (const category in data) {
-                const option = document.createElement("option");
-                option.value = category;
-                option.textContent = category;
-                categorySelect.appendChild(option);
-            }
+            populateCategoryOptions(data);
         })
         .catch(error => {
             console.error("Error loading categories:", error);
             alert("Failed to load categories. Please try again.");
         });
 
+    function populateCategoryOptions(data) {
+        for (const category in data) {
+            const option = document.createElement("option");
+            option.value = category;
+            option.textContent = category;
+            categorySelect.appendChild(option);
+        }
+    }
+
     // Handle category selection
     categorySelect.addEventListener("change", () => {
         const selectedCategory = categorySelect.value;
 
-        if (!selectedCategory) return;
+        if (!selectedCategory) {
+            alert("Please select a valid category.");
+            return;
+        }
 
         // Fetch word pairs for the selected category
-        fetch("words.json")
+        fetch("categories.json")
             .then(response => response.json())
             .then(data => {
                 wordPairs = data[selectedCategory];
@@ -59,9 +61,8 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     });
 
-    // Start Quiz
     function startQuiz() {
-        // Generate questions randomly
+        // Prepare quiz questions
         questions = [];
         wordPairs.forEach(pair => {
             questions.push({ question: `Translate to Arabic: ${pair.english}`, correctAnswer: pair.arabic });
@@ -69,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         questions = shuffleArray(questions);
 
-        // Initialize quiz
+        // Show quiz section
         setupSection.classList.add("hidden");
         quizSection.classList.remove("hidden");
         resultSection.classList.add("hidden");
@@ -78,8 +79,12 @@ document.addEventListener("DOMContentLoaded", () => {
         showNextQuestion();
     }
 
-    // Show Next Question
     function showNextQuestion() {
+        if (currentQuestionIndex >= questions.length) {
+            finishQuiz();
+            return;
+        }
+
         const currentQuestion = questions[currentQuestionIndex];
         quizQuestion.textContent = currentQuestion.question;
         userAnswer.value = "";
@@ -87,59 +92,38 @@ document.addEventListener("DOMContentLoaded", () => {
         nextQuestionBtn.classList.add("hidden");
     }
 
-    // Handle Answer Submission
     submitAnswer.addEventListener("click", () => {
         const currentQuestion = questions[currentQuestionIndex];
-        const userResponse = userAnswer.value.trim();
-        if (!userResponse) {
-            alert("Please enter an answer.");
-            return;
-        }
+        const answer = userAnswer.value.trim();
 
-        if (userResponse.toLowerCase() === currentQuestion.correctAnswer.toLowerCase()) {
-            score++;
-            quizFeedback.textContent = getRandomResponse(correctResponses);
+        if (answer === currentQuestion.correctAnswer) {
+            quizFeedback.textContent = "Correct!";
             quizFeedback.style.color = "green";
+            score++;
         } else {
-            quizFeedback.textContent = `${getRandomResponse(incorrectResponses)} Correct answer: ${currentQuestion.correctAnswer}`;
+            quizFeedback.textContent = `Incorrect! The correct answer is: ${currentQuestion.correctAnswer}`;
             quizFeedback.style.color = "red";
         }
 
         currentQuestionIndex++;
-        if (currentQuestionIndex < questions.length) {
-            nextQuestionBtn.classList.remove("hidden");
-        } else {
-            finishQuiz();
-        }
+        nextQuestionBtn.classList.remove("hidden");
     });
 
-    // Show Next Question on Button Click
-    nextQuestionBtn.addEventListener("click", showNextQuestion);
-
-    // Restart Quiz
-    restartQuiz.addEventListener("click", () => {
-        setupSection.classList.remove("hidden");
-        quizSection.classList.add("hidden");
-        resultSection.classList.add("hidden");
+    nextQuestionBtn.addEventListener("click", () => {
+        showNextQuestion();
     });
 
-    // Finish Quiz
     function finishQuiz() {
         quizSection.classList.add("hidden");
         resultSection.classList.remove("hidden");
         finalScore.textContent = `Your Score: ${score} / ${questions.length}`;
     }
 
-    // Utility Functions
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
         }
         return array;
-    }
-
-    function getRandomResponse(responses) {
-        return responses[Math.floor(Math.random() * responses.length)];
     }
 });
