@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const incorrectResponses = ["Oops! Try again.", "Better luck next time!", "Not quite right."];
 
     // Load categories from JSON
-    fetch("categories.json")
+    fetch("words.json")
         .then(response => response.json())
         .then(data => {
             for (const category in data) {
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!selectedCategory) return;
 
         // Fetch word pairs for the selected category
-        fetch("categories.json")
+        fetch("words.json")
             .then(response => response.json())
             .then(data => {
                 wordPairs = data[selectedCategory];
@@ -59,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     });
 
+    // Start Quiz
     function startQuiz() {
         // Generate questions randomly
         questions = [];
@@ -77,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
         showNextQuestion();
     }
 
+    // Show Next Question
     function showNextQuestion() {
         const currentQuestion = questions[currentQuestionIndex];
         quizQuestion.textContent = currentQuestion.question;
@@ -85,17 +87,59 @@ document.addEventListener("DOMContentLoaded", () => {
         nextQuestionBtn.classList.add("hidden");
     }
 
+    // Handle Answer Submission
+    submitAnswer.addEventListener("click", () => {
+        const currentQuestion = questions[currentQuestionIndex];
+        const userResponse = userAnswer.value.trim();
+        if (!userResponse) {
+            alert("Please enter an answer.");
+            return;
+        }
+
+        if (userResponse.toLowerCase() === currentQuestion.correctAnswer.toLowerCase()) {
+            score++;
+            quizFeedback.textContent = getRandomResponse(correctResponses);
+            quizFeedback.style.color = "green";
+        } else {
+            quizFeedback.textContent = `${getRandomResponse(incorrectResponses)} Correct answer: ${currentQuestion.correctAnswer}`;
+            quizFeedback.style.color = "red";
+        }
+
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            nextQuestionBtn.classList.remove("hidden");
+        } else {
+            finishQuiz();
+        }
+    });
+
+    // Show Next Question on Button Click
+    nextQuestionBtn.addEventListener("click", showNextQuestion);
+
+    // Restart Quiz
+    restartQuiz.addEventListener("click", () => {
+        setupSection.classList.remove("hidden");
+        quizSection.classList.add("hidden");
+        resultSection.classList.add("hidden");
+    });
+
+    // Finish Quiz
     function finishQuiz() {
         quizSection.classList.add("hidden");
         resultSection.classList.remove("hidden");
         finalScore.textContent = `Your Score: ${score} / ${questions.length}`;
     }
 
+    // Utility Functions
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
         }
         return array;
+    }
+
+    function getRandomResponse(responses) {
+        return responses[Math.floor(Math.random() * responses.length)];
     }
 });
