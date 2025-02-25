@@ -1,113 +1,101 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const categorySelect = document.getElementById("categorySelect");
-    const categorySearch = document.getElementById("categorySearch");
-    const quizSection = document.getElementById("quiz-section");
-    const mainMenu = document.getElementById("main-menu");
-    const quizQuestion = document.getElementById("quiz-question");
-    const userAnswer = document.getElementById("userAnswer");
-    const submitAnswer = document.getElementById("submitAnswer");
-    const quizFeedback = document.getElementById("quiz-feedback");
-    const resultSection = document.getElementById("result-section");
-    const finalScore = document.getElementById("finalScore");
-    const restartQuiz = document.getElementById("restartQuiz");
-    const addCategorySection = document.getElementById("add-category-section");
-    const saveNewCategory = document.getElementById("saveNewCategory");
+let categories = []; // Will store categories from JSON or a static array for now
+let currentCategory;
+let currentQuestionIndex = 0;
+let score = 0;
+let showAnswers = false;
 
-    let categories = {};
-    let wordPairs = [];
-    let questions = [];
-    let currentQuestionIndex = 0;
-    let score = 0;
-    let showAnswers = true;
-
-    // Fetch categories from JSON
-    fetch("words.json")
-        .then(response => response.json())
-        .then(data => {
-            categories = data;
-            populateCategoryOptions();
-        })
-        .catch(error => console.error("Error loading categories:", error));
-
-    function populateCategoryOptions() {
-        categorySelect.innerHTML = '<option value="" disabled selected>Select a category</option>';
-        for (const category in categories) {
-            const option = document.createElement("option");
-            option.value = category;
-            option.textContent = category;
-            categorySelect.appendChild(option);
-        }
-    }
-
-    categorySearch.addEventListener("input", () => {
-        const searchText = categorySearch.value.toLowerCase();
-        for (let option of categorySelect.options) {
-            const isVisible = option.textContent.toLowerCase().includes(searchText);
-            option.style.display = isVisible ? "block" : "none";
-        }
-    });
-
-    document.getElementById("withAnswers").addEventListener("click", () => {
-        showAnswers = true;
-        startQuiz();
-    });
-
-    document.getElementById("withoutAnswers").addEventListener("click", () => {
-        showAnswers = false;
-        startQuiz();
-    });
-
-    function startQuiz() {
-        const selectedCategory = categorySelect.value;
-        if (!selectedCategory) {
-            alert("Please select a category.");
-            return;
-        }
-        wordPairs = categories[selectedCategory];
-        questions = wordPairs.flatMap(pair => [
-            { question: pair.english, answer: pair.arabic },
-            { question: pair.arabic, answer: pair.english }
-        ]);
-        questions = questions.sort(() => Math.random() - 0.5);
-        score = 0;
-        currentQuestionIndex = 0;
-        mainMenu.classList.add("hidden");
-        quizSection.classList.remove("hidden");
-        showQuestion();
-    }
-
-    function showQuestion() {
-        const currentQuestion = questions[currentQuestionIndex];
-        quizQuestion.textContent = `Translate: ${currentQuestion.question}`;
-        userAnswer.value = "";
-        quizFeedback.textContent = "";
-    }
-
-    submitAnswer.addEventListener("click", () => {
-        const currentQuestion = questions[currentQuestionIndex];
-        const answer = userAnswer.value.trim();
-        if (answer === currentQuestion.answer) {
-            quizFeedback.textContent = "Correct!";
-            score++;
-        } else {
-            quizFeedback.textContent = showAnswers ? `Incorrect! Correct answer: ${currentQuestion.answer}` : "Incorrect!";
-        }
-        currentQuestionIndex++;
-        if (currentQuestionIndex < questions.length) {
-            setTimeout(showQuestion, 1000);
-        } else {
-            endQuiz();
-        }
-    });
-
-    function endQuiz() {
-        quizSection.classList.add("hidden");
-        resultSection.classList.remove("hidden");
-        finalScore.textContent = `Your score: ${score}/${questions.length}`;
-    }
-
-    restartQuiz.addEventListener("click", () => {
-        resultSection.classList.add("hidden");
-        mainMenu.classList.remove("hidden");
-    });
+document.getElementById('start-quiz').addEventListener('click', () => {
+    showCategoryList();
 });
+
+document.getElementById('add-category').addEventListener('click', () => {
+    showAddCategoryScreen();
+});
+
+document.getElementById('save-category').addEventListener('click', () => {
+    saveCategory();
+});
+
+document.getElementById('submit-answer').addEventListener('click', () => {
+    submitAnswer();
+});
+
+function showCategoryList() {
+    document.getElementById('main-menu').style.display = 'none';
+    // Load and display categories dynamically
+    document.getElementById('category-list').innerHTML = categories.map(category => 
+        `<div class="category-item" onclick="startQuiz('${category.name}')">${category.name}</div>`
+    ).join('');
+}
+
+function startQuiz(categoryName) {
+    currentCategory = categories.find(c => c.name === categoryName);
+    currentQuestionIndex = 0;
+    score = 0;
+    showQuizScreen();
+}
+
+function showQuizScreen() {
+    document.getElementById('quiz-screen').style.display = 'block';
+    document.getElementById('question').innerText = getNextQuestion();
+}
+
+function getNextQuestion() {
+    if (currentQuestionIndex >= currentCategory.words.length) {
+        showResultsScreen();
+        return '';
+    }
+
+    const question = currentCategory.words[currentQuestionIndex];
+    currentQuestionIndex++;
+    return question.english; // Show English first
+}
+
+function submitAnswer() {
+    const answer = document.getElementById('answer').value;
+    const correctAnswer = currentCategory.words[currentQuestionIndex - 1].arabic;
+    
+    if (answer === correctAnswer) {
+        score++;
+        document.getElementById('feedback').innerText = 'Correct!';
+    } else {
+        document.getElementById('feedback').innerText = `Incorrect! Correct answer: ${correctAnswer}`;
+    }
+
+    document.getElementById('question').innerText = getNextQuestion();
+    document.getElementById('answer').value = ''; // Clear the answer input
+}
+
+function showResultsScreen() {
+    document.getElementById('quiz-screen').style.display = 'none';
+    document.getElementById('results-screen').style.display = 'block';
+    document.getElementById('score').innerText = `${score}/${currentCategory.words.length}`;
+}
+
+function reset() {
+    document.getElementById('results-screen').style.display = 'none';
+    document.getElementById('main-menu').style.display = 'block';
+}
+
+function showAddCategoryScreen() {
+    document.getElementById('main-menu').style.display = 'none';
+    document.getElementById('add-category-screen').style.display = 'block';
+}
+
+function saveCategory() {
+    const categoryName = document.getElementById('category-name').value;
+    // Fetch words from table, process, and save
+    const words = [];
+    const rows = document.querySelectorAll('#category-table tbody tr');
+    rows.forEach(row => {
+        const english = row.cells[0].querySelector('input').value;
+        const arabic = row.cells[1].querySelector('input').value;
+        if (english && arabic) {
+            words.push({ english, arabic });
+        }
+    });
+    
+    categories.push({ name: categoryName, words });
+    document.getElementById('add-category-screen').style.display = 'none';
+    document.getElementById('main-menu').style.display = 'block';
+}
