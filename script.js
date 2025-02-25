@@ -1,12 +1,10 @@
 let categories = {};
 let currentCategory = '';
-let currentWords = [];
 let quizWords = [];
 let currentIndex = 0;
 let correctCount = 0;
 let withAnswers = true;
 
-// Load categories from JSON file
 async function loadCategories() {
   try {
     const response = await fetch('categories.json');
@@ -16,22 +14,11 @@ async function loadCategories() {
   }
 }
 
-// Save categories to JSON file (simulated download)
-function saveCategoriesToFile() {
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(categories, null, 2));
-  const downloadAnchor = document.createElement('a');
-  downloadAnchor.setAttribute("href", dataStr);
-  downloadAnchor.setAttribute("download", "categories.json");
-  document.body.appendChild(downloadAnchor);
-  downloadAnchor.click();
-  document.body.removeChild(downloadAnchor);
-}
-
 function showCategoryMenu() {
   toggleMenu('category-menu');
   const list = document.getElementById('category-list');
   list.innerHTML = '';
-  Object.keys(categories).forEach((category) => {
+  Object.keys(categories).forEach(category => {
     const li = document.createElement('li');
     li.textContent = category;
     li.onclick = () => selectCategory(category);
@@ -41,14 +28,18 @@ function showCategoryMenu() {
 
 function filterCategories() {
   const search = document.getElementById('category-search').value.toLowerCase();
-  document.querySelectorAll('#category-list li').forEach((item) => {
+  document.querySelectorAll('#category-list li').forEach(item => {
     item.style.display = item.textContent.toLowerCase().includes(search) ? '' : 'none';
   });
 }
 
 function selectCategory(category) {
   currentCategory = category;
-  currentWords = categories[category];
+  const words = categories[category];
+  quizWords = shuffle([
+    ...words.map(w => ({ question: w.english, answer: w.arabic, direction: 'enToAr' })),
+    ...words.map(w => ({ question: w.arabic, answer: w.english, direction: 'arToEn' }))
+  ]);
   document.getElementById('quiz-category').textContent = `Category: ${category}`;
   returnToMainMenu();
 }
@@ -56,7 +47,6 @@ function selectCategory(category) {
 function startQuiz(showAnswers) {
   if (!currentCategory) return alert('Please select a category first.');
   withAnswers = showAnswers;
-  quizWords = shuffle([...currentWords]);
   currentIndex = 0;
   correctCount = 0;
   toggleMenu('quiz-container');
@@ -64,9 +54,8 @@ function startQuiz(showAnswers) {
 }
 
 function showQuestion() {
-  const word = quizWords[currentIndex];
-  const isEnglishToArabic = Math.random() > 0.5;
-  document.getElementById('quiz-question').textContent = isEnglishToArabic ? `Translate to Arabic: ${word.english}` : `Translate to English: ${word.arabic}`;
+  const { question, direction } = quizWords[currentIndex];
+  document.getElementById('quiz-question').textContent = direction === 'enToAr' ? `Translate to Arabic: ${question}` : `Translate to English: ${question}`;
   document.getElementById('quiz-answer').value = '';
   document.getElementById('quiz-feedback').textContent = '';
   document.getElementById('quiz-answer').focus();
@@ -74,9 +63,7 @@ function showQuestion() {
 
 function submitAnswer() {
   const answer = document.getElementById('quiz-answer').value.trim();
-  const word = quizWords[currentIndex];
-  const isEnglishToArabic = document.getElementById('quiz-question').textContent.includes('Arabic');
-  const correctAnswer = isEnglishToArabic ? word.arabic : word.english;
+  const { answer: correctAnswer } = quizWords[currentIndex];
   const feedback = document.getElementById('quiz-feedback');
 
   if (answer.toLowerCase() === correctAnswer.toLowerCase()) {
@@ -113,8 +100,7 @@ function saveCategory() {
   }
 
   categories[name] = englishWords.map((eng, i) => ({ english: eng, arabic: arabicWords[i] }));
-  saveCategoriesToFile();
-  alert('Category saved and downloaded as JSON file!');
+  alert('Category saved!');
   returnToMainMenu();
 }
 
@@ -135,5 +121,4 @@ function shuffle(array) {
   return array;
 }
 
-// Load categories on page load
 window.onload = loadCategories;
