@@ -1,37 +1,36 @@
 document.addEventListener("DOMContentLoaded", () => {
     const categorySelect = document.getElementById("categorySelect");
-    const quizSection = document.getElementById("quiz-section");
-    const setupSection = document.getElementById("setup-section");
-    const quizQuestion = document.getElementById("quiz-question");
-    const userAnswer = document.getElementById("userAnswer");
-    const submitAnswer = document.getElementById("submitAnswer");
-    const quizFeedback = document.getElementById("quiz-feedback");
-    const nextQuestionBtn = document.getElementById("nextQuestion");
-    const finalScore = document.getElementById("finalScore");
-    const resultSection = document.getElementById("result-section");
-    const feedbackOption1 = document.getElementById("feedbackOption1");
-    const feedbackOption2 = document.getElementById("feedbackOption2");
+    const addCategoryBtn = document.getElementById("addCategoryBtn");
+    const newCategoryForm = document.getElementById("newCategoryForm");
+    const newCategoryName = document.getElementById("newCategoryName");
+    const englishWordsInput = document.getElementById("englishWordsInput");
+    const arabicWordsInput = document.getElementById("arabicWordsInput");
+    const categorySearch = document.getElementById("categorySearch");
 
     let wordPairs = [];
-    let questions = [];
-    let currentQuestionIndex = 0;
-    let score = 0;
-    let selectedCategory = "";  // Store selected category
-    let showAnswers = false;    // Control showing answers or not
+    let categoriesData = {};
 
-    // Load categories from JSON
-    fetch("words.json")
-        .then(response => response.json())
-        .then(data => {
-            populateCategoryOptions(data);
-        })
-        .catch(error => {
-            console.error("Error loading categories:", error);
-            alert("Failed to load categories. Please try again.");
-        });
+    // Load categories from JSON and localStorage
+    function loadCategories() {
+        fetch("words.json")
+            .then(response => response.json())
+            .then(data => {
+                categoriesData = data;
+                const savedCategories = JSON.parse(localStorage.getItem("customCategories"));
+                if (savedCategories) {
+                    categoriesData = { ...categoriesData, ...savedCategories };
+                }
+                populateCategoryOptions();
+            })
+            .catch(error => {
+                console.error("Error loading categories:", error);
+                alert("Failed to load categories. Please try again.");
+            });
+    }
 
-    function populateCategoryOptions(data) {
-        for (const category in data) {
+    function populateCategoryOptions() {
+        categorySelect.innerHTML = ""; // Clear existing options
+        for (const category in categoriesData) {
             const option = document.createElement("option");
             option.value = category;
             option.textContent = category;
@@ -39,115 +38,54 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Handle category selection
-    categorySelect.addEventListener("change", () => {
-        selectedCategory = categorySelect.value;
-        
-        if (!selectedCategory) {
-            alert("Please select a valid category.");
-            return;
-        }
-    });
-
-    // Handle feedback options
-    feedbackOption1.addEventListener("click", () => {
-        showAnswers = true;
-        loadWordPairsAndStartQuiz();
-    });
-
-    feedbackOption2.addEventListener("click", () => {
-        showAnswers = false;
-        loadWordPairsAndStartQuiz();
-    });
-
-    function loadWordPairsAndStartQuiz() {
-        if (!selectedCategory) {
-            alert("Please select a category first.");
-            return;
-        }
-
-        // Fetch word pairs for the selected category
-        fetch("words.json")
-            .then(response => response.json())
-            .then(data => {
-                wordPairs = data[selectedCategory];
-                if (!wordPairs || wordPairs.length === 0) {
-                    alert("No words available for this category.");
-                    return;
-                }
-                startQuiz();
-            })
-            .catch(error => {
-                console.error("Error loading word pairs:", error);
-                alert("Failed to load words. Please try again.");
-            });
-    }
-
-    function startQuiz() {
-        // Prepare quiz questions
-        questions = [];
-        wordPairs.forEach(pair => {
-            questions.push({ question: `Translate to Arabic: ${pair.english}`, correctAnswer: pair.arabic });
-            questions.push({ question: `Translate to English: ${pair.arabic}`, correctAnswer: pair.english });
+    // Search functionality for category dropdown
+    categorySearch.addEventListener("input", () => {
+        const searchText = categorySearch.value.toLowerCase();
+        const options = categorySelect.querySelectorAll("option");
+        options.forEach(option => {
+            option.style.display = option.textContent.toLowerCase().includes(searchText) ? "" : "none";
         });
-        questions = shuffleArray(questions);
+    });
 
-        // Show quiz section
-        setupSection.classList.add("hidden");
-        quizSection.classList.remove("hidden");
-        resultSection.classList.add("hidden");
-        currentQuestionIndex = 0;
-        score = 0;
-        showNextQuestion();
-    }
+    // Toggle new category form visibility
+    addCategoryBtn.addEventListener("click", () => {
+        newCategoryForm.classList.toggle("hidden");
+    });
 
-    function showNextQuestion() {
-        if (currentQuestionIndex >= questions.length) {
-            finishQuiz();
+    // Add new category
+    newCategoryForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const categoryName = newCategoryName.value.trim();
+        const englishWords = englishWordsInput.value.trim().split("\n");
+        const arabicWords = arabicWordsInput.value.trim().split("\n");
+
+        if (!categoryName || englishWords.length === 0 || arabicWords.length === 0) {
+            alert("Please fill out all fields.");
             return;
         }
 
-        const currentQuestion = questions[currentQuestionIndex];
-        quizQuestion.textContent = currentQuestion.question;
-        userAnswer.value = "";
-        quizFeedback.textContent = "";
-        nextQuestionBtn.classList.add("hidden");
-    }
-
-    submitAnswer.addEventListener("click", () => {
-        const currentQuestion = questions[currentQuestionIndex];
-        const answer = userAnswer.value.trim();
-
-        if (answer === currentQuestion.correctAnswer) {
-            quizFeedback.textContent = "Correct!";
-            quizFeedback.style.color = "green";
-            score++;
-        } else {
-            quizFeedback.textContent = showAnswers ? 
-                `Incorrect! The correct answer is: ${currentQuestion.correctAnswer}` : 
-                "Incorrect!";
-            quizFeedback.style.color = "red";
+        if (englishWords.length !== arabicWords.length) {
+            alert("Each English word must have a matching Arabic word.");
+            return;
         }
 
-        currentQuestionIndex++;
-        nextQuestionBtn.classList.remove("hidden");
-    });
-
-    nextQuestionBtn.addEventListener("click", () => {
-        showNextQuestion();
-    });
-
-    function finishQuiz() {
-        quizSection.classList.add("hidden");
-        resultSection.classList.remove("hidden");
-        finalScore.textContent = `Your Score: ${score} / ${questions.length}`;
-    }
-
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
+        const newWordPairs = [];
+        for (let i = 0; i < englishWords.length; i++) {
+            newWordPairs.push({ english: englishWords[i], arabic: arabicWords[i] });
         }
-        return array;
-    }
+
+        categoriesData[categoryName] = newWordPairs;
+        localStorage.setItem("customCategories", JSON.stringify({ ...JSON.parse(localStorage.getItem("customCategories") || "{}"), [categoryName]: newWordPairs }));
+        
+        newCategoryName.value = "";
+        englishWordsInput.value = "";
+        arabicWordsInput.value = "";
+        newCategoryForm.classList.add("hidden");
+
+        populateCategoryOptions();
+        alert("New category added successfully!");
+    });
+
+    loadCategories();
 });
