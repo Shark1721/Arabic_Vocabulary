@@ -96,3 +96,37 @@ textarea {
     font-weight: bold;
     margin-bottom: 20px;
 }
+
+.category-dropdown {
+    width: 300px;
+    max-height: 150px;
+    overflow-y: auto;
+    font-size: 1.1em;
+}
+
+.category-search {
+    width: 290px;
+    padding: 5px;
+    margin-bottom: 10px;
+    font-size: 1em;
+}
+
+#newCategoryForm {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#newCategoryForm.hidden {
+    display: none;
+}
+
+#newCategoryForm input,
+#newCategoryForm textarea {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 5px;
+    font-size: 1em;
+}
+
