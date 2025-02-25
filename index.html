@@ -3,48 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arabic Vocabulary</title>
+    <title>Arabic Vocabulary Quiz</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Arabic Vocabulary</h1>
+        <h1>Arabic Vocabulary Quiz</h1>
 
-        <!-- Setup Section -->
-        <div id="setup-section">
-            <input type="text" id="categorySearch" placeholder="Search categories..." class="category-select">
-            <select id="categorySelect" class="category-select">
-                <option value="" selected disabled>Select a category</option>
+        <!-- Main Menu -->
+        <div id="main-menu">
+            <input type="text" id="categorySearch" placeholder="Search categories..." class="input-style">
+            <select id="categorySelect" class="input-style">
+                <option value="" disabled selected>Select a category</option>
             </select>
-            <button id="feedbackOption1" class="option-button">With Answers</button>
-            <button id="feedbackOption2" class="option-button">Without Answers</button>
-        </div>
-
-        <!-- Add Category Section -->
-        <div id="add-category-section">
-            <h3>Add New Category</h3>
-            <input type="text" id="newCategoryName" placeholder="Category Name" class="large-input">
-            <textarea id="newWordsEnglish" placeholder="English words (one per line)"></textarea>
-            <textarea id="newWordsArabic" placeholder="Arabic words (one per line)"></textarea>
-            <button id="addCategoryButton" class="big-button">Add Category</button>
+            <button id="withAnswers" class="main-button">With Answers</button>
+            <button id="withoutAnswers" class="main-button">Without Answers</button>
+            <button id="addCategoryButton" class="main-button">Add Category</button>
         </div>
 
         <!-- Quiz Section -->
         <div id="quiz-section" class="hidden">
             <p id="quiz-question" class="question-text"></p>
-            <input id="userAnswer" type="text" class="large-input" placeholder="Enter your answer">
-            <button id="submitAnswer" class="big-button">Submit</button>
+            <input type="text" id="userAnswer" class="input-style" placeholder="Your answer...">
+            <button id="submitAnswer" class="main-button">Submit</button>
             <p id="quiz-feedback"></p>
-            <button id="nextQuestion" class="big-button hidden">Next Question</button>
         </div>
 
         <!-- Result Section -->
         <div id="result-section" class="hidden">
             <p id="finalScore"></p>
-            <button id="restartQuiz" class="big-button">Restart Quiz</button>
+            <button id="restartQuiz" class="main-button">Main Menu</button>
+        </div>
+
+        <!-- Add Category Section -->
+        <div id="add-category-section" class="hidden">
+            <h3>Add New Category</h3>
+            <input type="text" id="newCategoryName" placeholder="Category Name" class="input-style">
+            <textarea id="newWordsEnglish" placeholder="English words (one per line)" class="textarea-style"></textarea>
+            <textarea id="newWordsArabic" placeholder="Arabic words (one per line)" class="textarea-style"></textarea>
+            <button id="saveNewCategory" class="main-button">Save Category</button>
         </div>
     </div>
 
-    <script src="java.js" defer></script>
+    <script src="script.js" defer></script>
 </body>
 </html>
