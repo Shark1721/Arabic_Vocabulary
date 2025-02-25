@@ -1,132 +1,65 @@
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f2d6ff;
-    color: #333;
     text-align: center;
+    padding: 20px;
 }
 
-.container {
-    max-width: 500px;
+h1 {
+    color: #333;
+}
+
+.category-menu {
     margin: 20px auto;
-    padding: 15px;
-    background: #b592d1;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+#categorySearch {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+#categoryDropdown {
+    width: 100%;
+    height: 200px;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
 }
 
 .hidden {
     display: none;
 }
 
-textarea, input[type="text"] {
-    width: 100%;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 1.2em;
-    box-sizing: border-box;
-}
-
-textarea {
-    height: 100px;
-}
-
-/* Category Select Button */
-.category-select {
-    background-color: #b746eb;
-    color: white;
-    padding: 10px;
-    font-size: 1.3em;
-    border-radius: 8px;
-    border: none;
-    margin-bottom: 15px;
-    cursor: pointer;
-}
-
-.category-select:hover {
-    background-color: #d46ecf;
-}
-
-/* Option Buttons (Feedback Options) */
-.option-button {
-    background-color: #802f9c;
-    color: white;
-    padding: 12px;
-    font-size: 1.2em;
-    border-radius: 5px;
-    cursor: pointer;
-    border: none;
-    margin: 10px 5px;
-}
-
-.option-button:hover {
-    background-color: #d46ecf;
-}
-
-/* General Buttons */
-.big-button {
-    background-color: #802f9c;
-    color: white;
-    padding: 15px;
-    font-size: 1.5em;
-    border-radius: 10px;
-    cursor: pointer;
-    border: none;
-    margin: 10px 0;
-}
-
-.big-button:hover {
-    background-color: #d46ecf;
-}
-
-/* Answer Input Field */
-.large-input {
-    font-size: 1.5em;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-/* Question Text */
-.question-text {
-    font-size: 3em;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-.category-dropdown {
-    width: 300px;
-    max-height: 150px;
-    overflow-y: auto;
-    font-size: 1.1em;
-}
-
-.category-search {
-    width: 290px;
-    padding: 5px;
-    margin-bottom: 10px;
-    font-size: 1em;
+#quizContainer {
+    margin-top: 20px;
 }
 
 #newCategoryForm {
     margin-top: 20px;
     border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 20px;
+    border-radius: 10px;
+    background: #f9f9f9;
 }
 
-#newCategoryForm.hidden {
-    display: none;
-}
-
-#newCategoryForm input,
-#newCategoryForm textarea {
+textarea {
     width: 100%;
-    margin-bottom: 10px;
-    padding: 5px;
-    font-size: 1em;
+    height: 100px;
+    margin: 10px 0;
+    padding: 10px;
+    box-sizing: border-box;
 }
-
