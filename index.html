@@ -27,6 +27,21 @@
             <p id="quiz-feedback"></p>
             <button id="nextQuestion" class="big-button hidden">Next Question</button>
         </div>
+        <!-- Searchable and bigger category dropdown -->
+        <input type="text" id="categorySearch" placeholder="Search category..." class="category-search">
+        <select id="categorySelect" class="category-dropdown"></select>
+        
+        <!-- Button to add a new category -->
+        <button id="addCategoryBtn" class="btn">Add New Category</button>
+        
+        <!-- Form for creating a new category -->
+        <div id="newCategoryForm" class="hidden">
+            <input type="text" id="newCategoryName" placeholder="Category Name">
+            <textarea id="englishWordsInput" placeholder="English words (one per line)"></textarea>
+            <textarea id="arabicWordsInput" placeholder="Arabic words (matching lines)"></textarea>
+            <button type="submit" class="btn">Save Category</button>
+        </div>
+
 
         <!-- Result Section -->
         <div id="result-section" class="hidden">
