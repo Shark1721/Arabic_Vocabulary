@@ -1,10 +1,31 @@
-const categories = JSON.parse(localStorage.getItem('categories')) || {};
+let categories = {};
 let currentCategory = '';
 let currentWords = [];
 let quizWords = [];
 let currentIndex = 0;
 let correctCount = 0;
 let withAnswers = true;
+
+// Load categories from JSON file
+async function loadCategories() {
+  try {
+    const response = await fetch('categories.json');
+    categories = await response.json();
+  } catch (error) {
+    alert('Error loading categories. Make sure categories.json is available.');
+  }
+}
+
+// Save categories to JSON file (simulated download)
+function saveCategoriesToFile() {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(categories, null, 2));
+  const downloadAnchor = document.createElement('a');
+  downloadAnchor.setAttribute("href", dataStr);
+  downloadAnchor.setAttribute("download", "categories.json");
+  document.body.appendChild(downloadAnchor);
+  downloadAnchor.click();
+  document.body.removeChild(downloadAnchor);
+}
 
 function showCategoryMenu() {
   toggleMenu('category-menu');
@@ -20,8 +41,7 @@ function showCategoryMenu() {
 
 function filterCategories() {
   const search = document.getElementById('category-search').value.toLowerCase();
-  const items = document.querySelectorAll('#category-list li');
-  items.forEach((item) => {
+  document.querySelectorAll('#category-list li').forEach((item) => {
     item.style.display = item.textContent.toLowerCase().includes(search) ? '' : 'none';
   });
 }
@@ -36,7 +56,7 @@ function selectCategory(category) {
 function startQuiz(showAnswers) {
   if (!currentCategory) return alert('Please select a category first.');
   withAnswers = showAnswers;
-  quizWords = shuffle([...currentWords, ...currentWords]);
+  quizWords = shuffle([...currentWords]);
   currentIndex = 0;
   correctCount = 0;
   toggleMenu('quiz-container');
@@ -58,7 +78,7 @@ function submitAnswer() {
   const isEnglishToArabic = document.getElementById('quiz-question').textContent.includes('Arabic');
   const correctAnswer = isEnglishToArabic ? word.arabic : word.english;
   const feedback = document.getElementById('quiz-feedback');
-  
+
   if (answer.toLowerCase() === correctAnswer.toLowerCase()) {
     correctCount++;
     feedback.textContent = 'Correct!';
@@ -69,11 +89,9 @@ function submitAnswer() {
   }
 
   currentIndex++;
-  if (currentIndex < quizWords.length) {
-    setTimeout(showQuestion, 1000);
-  } else {
-    setTimeout(showResults, 1000);
-  }
+  setTimeout(() => {
+    currentIndex < quizWords.length ? showQuestion() : showResults();
+  }, 1000);
 }
 
 function showResults() {
@@ -90,11 +108,13 @@ function saveCategory() {
   const englishWords = document.getElementById('english-words').value.trim().split('\n');
   const arabicWords = document.getElementById('arabic-words').value.trim().split('\n');
 
-  if (!name || englishWords.length !== arabicWords.length) return alert('Please enter a valid category name and equal number of words.');
+  if (!name || englishWords.length !== arabicWords.length) {
+    return alert('Please enter a valid category name and equal number of words.');
+  }
 
   categories[name] = englishWords.map((eng, i) => ({ english: eng, arabic: arabicWords[i] }));
-  localStorage.setItem('categories', JSON.stringify(categories));
-  alert('Category saved!');
+  saveCategoriesToFile();
+  alert('Category saved and downloaded as JSON file!');
   returnToMainMenu();
 }
 
@@ -103,7 +123,7 @@ function returnToMainMenu() {
 }
 
 function toggleMenu(menuId) {
-  document.querySelectorAll('.menu').forEach((menu) => menu.classList.add('hidden'));
+  document.querySelectorAll('.menu').forEach(menu => menu.classList.add('hidden'));
   document.getElementById(menuId).classList.remove('hidden');
 }
 
@@ -114,3 +134,6 @@ function shuffle(array) {
   }
   return array;
 }
+
+// Load categories on page load
+window.onload = loadCategories;
