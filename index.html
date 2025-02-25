@@ -3,53 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arabic</title>
+    <title>Vocabulary App</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Arabic Vocabulary</h1>
+    <h1>Vocabulary App</h1>
 
-        <!-- Setup Section -->
-        <div id="setup-section">
-            <select id="categorySelect" class="category-select">
-                <option value="" selected disabled>Select a category</option>
-            </select>
-            <button id="feedbackOption1" class="option-button">With Answers</button>
-            <button id="feedbackOption2" class="option-button">Without Answers</button>
-        </div>
-
-        <!-- Quiz Section -->
-        <div id="quiz-section" class="hidden">
-            <p id="quiz-question" class="question-text"></p>
-            <input id="userAnswer" type="text" class="large-input" placeholder="Enter your answer">
-            <button id="submitAnswer" class="big-button">Submit</button>
-            <p id="quiz-feedback"></p>
-            <button id="nextQuestion" class="big-button hidden">Next Question</button>
-        </div>
-        <!-- Searchable and bigger category dropdown -->
-        <input type="text" id="categorySearch" placeholder="Search category..." class="category-search">
-        <select id="categorySelect" class="category-dropdown"></select>
-        
-        <!-- Button to add a new category -->
-        <button id="addCategoryBtn" class="btn">Add New Category</button>
-        
-        <!-- Form for creating a new category -->
-        <div id="newCategoryForm" class="hidden">
-            <input type="text" id="newCategoryName" placeholder="Category Name">
-            <textarea id="englishWordsInput" placeholder="English words (one per line)"></textarea>
-            <textarea id="arabicWordsInput" placeholder="Arabic words (matching lines)"></textarea>
-            <button type="submit" class="btn">Save Category</button>
-        </div>
-
-
-        <!-- Result Section -->
-        <div id="result-section" class="hidden">
-            <p id="finalScore"></p>
-            <button id="restartQuiz" class="big-button">Restart Quiz</button>
-        </div>
+    <div class="category-menu">
+        <input type="text" id="categorySearch" placeholder="Search Categories">
+        <select id="categoryDropdown" size="10">
+            <!-- Category options will be populated here -->
+        </select>
     </div>
 
-    <script src="java.js" defer></script>
+    <button id="startQuiz">Start Quiz</button>
+    <button id="addNewCategory">Add New Category</button>
+    <button id="clearCustomCategories">Clear Custom Categories</button>
+
+    <div id="quizContainer" class="hidden">
+        <h2 id="quizQuestion"></h2>
+        <input type="text" id="answerInput" placeholder="Your answer">
+        <button id="submitAnswer">Submit</button>
+        <p id="quizFeedback"></p>
+    </div>
+
+    <div id="newCategoryForm" class="hidden">
+        <h2>Add New Category</h2>
+        <input type="text" id="newCategoryName" placeholder="Category Name">
+        <textarea id="englishWordsInput" placeholder="English Words (one per line)"></textarea>
+        <textarea id="arabicWordsInput" placeholder="Arabic Words (one per line)"></textarea>
+        <button id="saveNewCategory">Save Category</button>
+        <button id="cancelNewCategory">Cancel</button>
+    </div>
+
+    <script src="java.js"></script>
 </body>
 </html>
