@@ -9,11 +9,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextQuestionBtn = document.getElementById("nextQuestion");
     const finalScore = document.getElementById("finalScore");
     const resultSection = document.getElementById("result-section");
+    const feedbackOption1 = document.getElementById("feedbackOption1");
+    const feedbackOption2 = document.getElementById("feedbackOption2");
 
     let wordPairs = [];
     let questions = [];
     let currentQuestionIndex = 0;
     let score = 0;
+    let selectedCategory = "";  // Store selected category
+    let showAnswers = false;    // Control showing answers or not
 
     // Load categories from JSON
     fetch("words.json")
@@ -37,10 +41,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle category selection
     categorySelect.addEventListener("change", () => {
-        const selectedCategory = categorySelect.value;
-
+        selectedCategory = categorySelect.value;
+        
         if (!selectedCategory) {
             alert("Please select a valid category.");
+            return;
+        }
+    });
+
+    // Handle feedback options
+    feedbackOption1.addEventListener("click", () => {
+        showAnswers = true;
+        loadWordPairsAndStartQuiz();
+    });
+
+    feedbackOption2.addEventListener("click", () => {
+        showAnswers = false;
+        loadWordPairsAndStartQuiz();
+    });
+
+    function loadWordPairsAndStartQuiz() {
+        if (!selectedCategory) {
+            alert("Please select a category first.");
             return;
         }
 
@@ -59,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.error("Error loading word pairs:", error);
                 alert("Failed to load words. Please try again.");
             });
-    });
+    }
 
     function startQuiz() {
         // Prepare quiz questions
@@ -101,7 +123,9 @@ document.addEventListener("DOMContentLoaded", () => {
             quizFeedback.style.color = "green";
             score++;
         } else {
-            quizFeedback.textContent = `Incorrect! The correct answer is: ${currentQuestion.correctAnswer}`;
+            quizFeedback.textContent = showAnswers ? 
+                `Incorrect! The correct answer is: ${currentQuestion.correctAnswer}` : 
+                "Incorrect!";
             quizFeedback.style.color = "red";
         }
 
