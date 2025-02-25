@@ -3,41 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arabic Vocabulary Quiz</title>
+    <title>Arabic Vocabulary Test</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="main-menu">
-        <button id="start-quiz">Start Quiz</button>
-        <button id="add-category">Add Category</button>
-        <input type="text" id="category-search" placeholder="Search categories..." />
-        <div id="category-list"></div>
+    <div class="menu">
+        <button id="chooseCategoryBtn">Choose Category</button>
+        <button id="startWithAnswersBtn">Start with Answers</button>
+        <button id="startWithoutAnswersBtn">Start without Answers</button>
+        <button id="addCategoryBtn">Add Category</button>
     </div>
 
-    <div id="quiz-screen" style="display: none;">
+    <div id="quizContainer" class="hidden">
         <div id="question"></div>
-        <input type="text" id="answer" />
-        <button id="submit-answer">Submit</button>
+        <input type="text" id="answerInput" placeholder="Type your answer">
+        <button id="submitAnswerBtn">Submit</button>
         <div id="feedback"></div>
+        <button id="nextBtn" class="hidden">Next</button>
+        <div id="scoreDisplay" class="hidden"></div>
+        <button id="resetBtn" class="hidden">Reset</button>
     </div>
 
-    <div id="results-screen" style="display: none;">
-        <div id="score"></div>
-        <button id="reset">Reset</button>
-    </div>
-
-    <div id="add-category-screen" style="display: none;">
-        <input type="text" id="category-name" placeholder="Category Name" />
-        <table id="category-table">
-            <thead>
-                <tr>
-                    <th>English</th>
-                    <th>Arabic</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <button id="save-category">Save Category</button>
+    <div id="addCategoryContainer" class="hidden">
+        <h2>Add New Category</h2>
+        <input type="text" id="categoryName" placeholder="Category Name">
+        <textarea id="englishWords" placeholder="English Words (one per line)"></textarea>
+        <textarea id="arabicWords" placeholder="Arabic Words (one per line)"></textarea>
+        <button id="addCategoryFormBtn">Add Category</button>
     </div>
 
     <script src="script.js"></script>
