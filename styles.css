@@ -1,46 +1,30 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f2d6ff;
-    color: #333;
     text-align: center;
+    color: #333;
 }
 
 .container {
-    max-width: 600px;
+    max-width: 400px;
     margin: 20px auto;
     padding: 15px;
     background: #b592d1;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.hidden {
-    display: none;
-}
-
-input[type="text"], textarea, select {
-    width: 100%;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+.input-style, .textarea-style {
+    width: 80%;
+    margin: 10px;
     padding: 10px;
-    font-size: 1.2em;
+    border-radius: 5px;
 }
 
-.category-select {
-    font-size: 1.2em;
-}
-
-.big-button {
-    background-color: #802f9c;
+.main-button {
+    background: #802f9c;
     color: white;
-    padding: 10px 15px;
     border: none;
+    padding: 10px;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1.2em;
-}
-
-.big-button:hover {
-    background-color: #d46ecf;
 }
