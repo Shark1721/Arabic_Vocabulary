@@ -7,44 +7,39 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Arabic Vocabulary Quiz</h1>
-
-        <!-- Main Menu -->
-        <div id="main-menu">
-            <input type="text" id="categorySearch" placeholder="Search categories..." class="input-style">
-            <select id="categorySelect" class="input-style">
-                <option value="" disabled selected>Select a category</option>
-            </select>
-            <button id="withAnswers" class="main-button">With Answers</button>
-            <button id="withoutAnswers" class="main-button">Without Answers</button>
-            <button id="addCategoryButton" class="main-button">Add Category</button>
-        </div>
-
-        <!-- Quiz Section -->
-        <div id="quiz-section" class="hidden">
-            <p id="quiz-question" class="question-text"></p>
-            <input type="text" id="userAnswer" class="input-style" placeholder="Your answer...">
-            <button id="submitAnswer" class="main-button">Submit</button>
-            <p id="quiz-feedback"></p>
-        </div>
-
-        <!-- Result Section -->
-        <div id="result-section" class="hidden">
-            <p id="finalScore"></p>
-            <button id="restartQuiz" class="main-button">Main Menu</button>
-        </div>
-
-        <!-- Add Category Section -->
-        <div id="add-category-section" class="hidden">
-            <h3>Add New Category</h3>
-            <input type="text" id="newCategoryName" placeholder="Category Name" class="input-style">
-            <textarea id="newWordsEnglish" placeholder="English words (one per line)" class="textarea-style"></textarea>
-            <textarea id="newWordsArabic" placeholder="Arabic words (one per line)" class="textarea-style"></textarea>
-            <button id="saveNewCategory" class="main-button">Save Category</button>
-        </div>
+    <div id="main-menu">
+        <button id="start-quiz">Start Quiz</button>
+        <button id="add-category">Add Category</button>
+        <input type="text" id="category-search" placeholder="Search categories..." />
+        <div id="category-list"></div>
     </div>
 
-    <script src="script.js" defer></script>
+    <div id="quiz-screen" style="display: none;">
+        <div id="question"></div>
+        <input type="text" id="answer" />
+        <button id="submit-answer">Submit</button>
+        <div id="feedback"></div>
+    </div>
+
+    <div id="results-screen" style="display: none;">
+        <div id="score"></div>
+        <button id="reset">Reset</button>
+    </div>
+
+    <div id="add-category-screen" style="display: none;">
+        <input type="text" id="category-name" placeholder="Category Name" />
+        <table id="category-table">
+            <thead>
+                <tr>
+                    <th>English</th>
+                    <th>Arabic</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <button id="save-category">Save Category</button>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
