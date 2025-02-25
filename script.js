@@ -1,124 +1,116 @@
-let categories = [];
+const categories = JSON.parse(localStorage.getItem('categories')) || {};
+let currentCategory = '';
+let currentWords = [];
+let quizWords = [];
+let currentIndex = 0;
+let correctCount = 0;
+let withAnswers = true;
 
-// Load categories from words.json
-fetch('words.json')
-    .then(response => response.json())
-    .then(data => {
-        categories = data.categories;
-    })
-    .catch(error => console.error('Error loading JSON data:', error));
-
-let currentCategory;
-let currentQuestionIndex = 0;
-let score = 0;
-let quizMode = 'withAnswers';
-
-document.getElementById('chooseCategoryBtn').addEventListener('click', chooseCategory);
-document.getElementById('startWithAnswersBtn').addEventListener('click', startQuizWithAnswers);
-document.getElementById('startWithoutAnswersBtn').addEventListener('click', startQuizWithoutAnswers);
-document.getElementById('addCategoryBtn').addEventListener('click', openAddCategoryMenu);
-document.getElementById('addCategoryFormBtn').addEventListener('click', addCategory);
-document.getElementById('submitAnswerBtn').addEventListener('click', submitAnswer);
-document.getElementById('nextBtn').addEventListener('click', showNextQuestion);
-document.getElementById('resetBtn').addEventListener('click', resetQuiz);
-
-function chooseCategory() {
-    let categoryNames = categories.map(category => category.name).join(', ');
-    let category = prompt(`Choose a Category: ${categoryNames}`);
-    currentCategory = categories.find(cat => cat.name.toLowerCase() === category.toLowerCase());
-
-    if (currentCategory) {
-        document.getElementById('quizContainer').classList.remove('hidden');
-        startQuiz();
-    } else {
-        alert('Category not found!');
-    }
+function showCategoryMenu() {
+  toggleMenu('category-menu');
+  const list = document.getElementById('category-list');
+  list.innerHTML = '';
+  Object.keys(categories).forEach((category) => {
+    const li = document.createElement('li');
+    li.textContent = category;
+    li.onclick = () => selectCategory(category);
+    list.appendChild(li);
+  });
 }
 
-function startQuizWithAnswers() {
-    quizMode = 'withAnswers';
-    startQuiz();
+function filterCategories() {
+  const search = document.getElementById('category-search').value.toLowerCase();
+  const items = document.querySelectorAll('#category-list li');
+  items.forEach((item) => {
+    item.style.display = item.textContent.toLowerCase().includes(search) ? '' : 'none';
+  });
 }
 
-function startQuizWithoutAnswers() {
-    quizMode = 'withoutAnswers';
-    startQuiz();
+function selectCategory(category) {
+  currentCategory = category;
+  currentWords = categories[category];
+  document.getElementById('quiz-category').textContent = `Category: ${category}`;
+  returnToMainMenu();
 }
 
-function startQuiz() {
-    currentQuestionIndex = 0;
-    score = 0;
-    document.getElementById('scoreDisplay').classList.add('hidden');
-    document.getElementById('nextBtn').classList.add('hidden');
-    showNextQuestion();
+function startQuiz(showAnswers) {
+  if (!currentCategory) return alert('Please select a category first.');
+  withAnswers = showAnswers;
+  quizWords = shuffle([...currentWords, ...currentWords]);
+  currentIndex = 0;
+  correctCount = 0;
+  toggleMenu('quiz-container');
+  showQuestion();
 }
 
-function showNextQuestion() {
-    if (currentQuestionIndex < currentCategory.words.length) {
-        let currentQuestion = currentCategory.words[currentQuestionIndex];
-        document.getElementById('question').textContent = `Translate to Arabic: ${currentQuestion.english}`;
-        document.getElementById('answerInput').value = '';
-        document.getElementById('feedback').textContent = '';
-    } else {
-        showScore();
-    }
+function showQuestion() {
+  const word = quizWords[currentIndex];
+  const isEnglishToArabic = Math.random() > 0.5;
+  document.getElementById('quiz-question').textContent = isEnglishToArabic ? `Translate to Arabic: ${word.english}` : `Translate to English: ${word.arabic}`;
+  document.getElementById('quiz-answer').value = '';
+  document.getElementById('quiz-feedback').textContent = '';
+  document.getElementById('quiz-answer').focus();
 }
 
 function submitAnswer() {
-    let userAnswer = document.getElementById('answerInput').value.trim();
-    let currentQuestion = currentCategory.words[currentQuestionIndex];
-    let correctAnswer = currentQuestion.arabic;
+  const answer = document.getElementById('quiz-answer').value.trim();
+  const word = quizWords[currentIndex];
+  const isEnglishToArabic = document.getElementById('quiz-question').textContent.includes('Arabic');
+  const correctAnswer = isEnglishToArabic ? word.arabic : word.english;
+  const feedback = document.getElementById('quiz-feedback');
+  
+  if (answer.toLowerCase() === correctAnswer.toLowerCase()) {
+    correctCount++;
+    feedback.textContent = 'Correct!';
+    feedback.style.color = 'green';
+  } else {
+    feedback.textContent = withAnswers ? `Incorrect! Correct: ${correctAnswer}` : 'Incorrect!';
+    feedback.style.color = 'red';
+  }
 
-    if (userAnswer === correctAnswer) {
-        score++;
-        showFeedback(true);
-    } else {
-        showFeedback(false, correctAnswer);
-    }
-
-    currentQuestionIndex++;
-    document.getElementById('nextBtn').classList.remove('hidden');
+  currentIndex++;
+  if (currentIndex < quizWords.length) {
+    setTimeout(showQuestion, 1000);
+  } else {
+    setTimeout(showResults, 1000);
+  }
 }
 
-function showFeedback(correct, correctAnswer) {
-    let feedback = correct ? 'Correct!' : `Incorrect! The correct answer is: ${correctAnswer}`;
-    document.getElementById('feedback').textContent = feedback;
-
-    if (quizMode === 'withoutAnswers' && !correct) {
-        document.getElementById('feedback').textContent = 'Incorrect!';
-    }
+function showResults() {
+  document.getElementById('quiz-score').textContent = `Score: ${correctCount} / ${quizWords.length}`;
+  toggleMenu('result-container');
 }
 
-function showScore() {
-    document.getElementById('scoreDisplay').textContent = `Your score: ${score}/${currentCategory.words.length}`;
-    document.getElementById('scoreDisplay').classList.remove('hidden');
-    document.getElementById('resetBtn').classList.remove('hidden');
+function showAddCategory() {
+  toggleMenu('add-category-menu');
 }
 
-function openAddCategoryMenu() {
-    document.getElementById('addCategoryContainer').classList.remove('hidden');
+function saveCategory() {
+  const name = document.getElementById('new-category-name').value.trim();
+  const englishWords = document.getElementById('english-words').value.trim().split('\n');
+  const arabicWords = document.getElementById('arabic-words').value.trim().split('\n');
+
+  if (!name || englishWords.length !== arabicWords.length) return alert('Please enter a valid category name and equal number of words.');
+
+  categories[name] = englishWords.map((eng, i) => ({ english: eng, arabic: arabicWords[i] }));
+  localStorage.setItem('categories', JSON.stringify(categories));
+  alert('Category saved!');
+  returnToMainMenu();
 }
 
-function addCategory() {
-    let name = document.getElementById('categoryName').value;
-    let englishWords = document.getElementById('englishWords').value.split('\n');
-    let arabicWords = document.getElementById('arabicWords').value.split('\n');
-
-    let words = englishWords.map((eng, index) => ({
-        english: eng.trim(),
-        arabic: arabicWords[index].trim()
-    }));
-
-    categories.push({ name, words });
-
-    // Save to the local JSON file or storage (this is for simplicity, typically server-side would handle it)
-    alert('Category added!');
-    document.getElementById('addCategoryContainer').classList.add('hidden');
+function returnToMainMenu() {
+  toggleMenu('main-menu');
 }
 
-function resetQuiz() {
-    document.getElementById('quizContainer').classList.add('hidden');
-    document.getElementById('scoreDisplay').classList.add('hidden');
-    document.getElementById('resetBtn').classList.add('hidden');
-    document.getElementById('chooseCategoryBtn').click();
+function toggleMenu(menuId) {
+  document.querySelectorAll('.menu').forEach((menu) => menu.classList.add('hidden'));
+  document.getElementById(menuId).classList.remove('hidden');
+}
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }
