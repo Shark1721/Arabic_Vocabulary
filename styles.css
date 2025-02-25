@@ -1,65 +1,46 @@
 body {
     font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 20px;
-}
-
-h1 {
+    background-color: #f2d6ff;
     color: #333;
+    text-align: center;
 }
 
-.category-menu {
+.container {
+    max-width: 600px;
     margin: 20px auto;
-    width: 300px;
-}
-
-#categorySearch {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-}
-
-#categoryDropdown {
-    width: 100%;
-    height: 200px;
-    box-sizing: border-box;
-}
-
-button {
-    padding: 10px 20px;
-    margin: 10px;
-    border: none;
-    background-color: #007BFF;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
+    padding: 15px;
+    background: #b592d1;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .hidden {
     display: none;
 }
 
-#quizContainer {
-    margin-top: 20px;
-}
-
-#newCategoryForm {
-    margin-top: 20px;
-    border: 1px solid #ccc;
-    padding: 20px;
-    border-radius: 10px;
-    background: #f9f9f9;
-}
-
-textarea {
+input[type="text"], textarea, select {
     width: 100%;
-    height: 100px;
     margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
     padding: 10px;
-    box-sizing: border-box;
+    font-size: 1.2em;
+}
+
+.category-select {
+    font-size: 1.2em;
+}
+
+.big-button {
+    background-color: #802f9c;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.big-button:hover {
+    background-color: #d46ecf;
 }
