@@ -1,51 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arabic Vocabulary Quiz</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script defer src="app.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arabic Vocabulary Quiz</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div id="main-menu" class="menu">
-    <h1>Arabic Vocabulary Quiz</h1>
-    <button onclick="showCategoryMenu()">Choose Category</button>
-    <button onclick="startQuiz(true)">Start Quiz (With Answers)</button>
-    <button onclick="startQuiz(false)">Start Quiz (Without Answers)</button>
-    <button onclick="showAddCategory()">Add Category</button>
-  </div>
-
-  <div id="category-menu" class="menu hidden">
-    <h2>Choose Category</h2>
-    <input type="text" id="category-search" placeholder="Search..." oninput="filterCategories()" />
-    <ul id="category-list"></ul>
-    <button onclick="returnToMainMenu()">Back to Menu</button>
-  </div>
-
-  <div id="quiz-container" class="menu hidden">
-    <h2 id="quiz-category"></h2>
-    <p id="quiz-question"></p>
-    <input type="text" id="quiz-answer" placeholder="Your answer..." onkeypress="if(event.key==='Enter') submitAnswer()" />
-    <button onclick="submitAnswer()">Submit</button>
-    <p id="quiz-feedback"></p>
-  </div>
-
-  <div id="result-container" class="menu hidden">
-    <h2>Quiz Results</h2>
-    <p id="quiz-score"></p>
-    <button onclick="returnToMainMenu()">Back to Main Menu</button>
-  </div>
-
-  <div id="add-category-menu" class="menu hidden">
-    <h2>Add Category</h2>
-    <input type="text" id="new-category-name" placeholder="Category Name" />
-    <div class="columns">
-      <textarea id="english-words" placeholder="English words (one per line)"></textarea>
-      <textarea id="arabic-words" placeholder="Arabic words (one per line)"></textarea>
+    <div id="main-menu">
+        <h1>Vocabulary Quiz</h1>
+        <button id="start-quiz">Start Quiz</button>
+        <button id="add-category">Add Category</button>
+        <div id="category-list"></div>
     </div>
-    <button onclick="saveCategory()">Save Category</button>
-    <button onclick="returnToMainMenu()">Back to Main Menu</button>
-  </div>
+
+    <div id="quiz-screen" style="display: none;">
+        <h2>Quiz</h2>
+        <div id="question"></div>
+        <input type="text" id="answer" placeholder="Your answer...">
+        <button id="submit-answer">Submit Answer</button>
+        <div id="feedback"></div>
+    </div>
+
+    <div id="results-screen" style="display: none;">
+        <h2>Results</h2>
+        <div id="score"></div>
+        <button id="reset">Main Menu</button>
+    </div>
+
+    <div id="add-category-screen" style="display: none;">
+        <h2>Add New Category</h2>
+        <input type="text" id="category-name" placeholder="Category Name">
+        <table id="category-table">
+            <thead>
+                <tr>
+                    <th>English</th>
+                    <th>Arabic</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" placeholder="English"></td>
+                    <td><input type="text" placeholder="Arabic"></td>
+                </tr>
+            </tbody>
+        </table>
+        <button id="save-category">Save Category</button>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
