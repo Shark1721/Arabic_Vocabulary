@@ -38,6 +38,7 @@ let showAnswers = false;
 
 document.getElementById('start-quiz').addEventListener('click', () => {
     showCategoryList();
+    document.getElementById('main-menu').style.display = 'none';
 });
 
 document.getElementById('add-category').addEventListener('click', () => {
@@ -134,12 +135,6 @@ function reset() {
 function showAddCategoryScreen() {
     document.getElementById('main-menu').style.display = 'none';
     document.getElementById('add-category-screen').style.display = 'block';
-    document.querySelector('#category-table tbody').innerHTML = `
-        <tr>
-            <td><input type="text" placeholder="English" /></td>
-            <td><input type="text" placeholder="Arabic" /></td>
-        </tr>
-    `;
 }
 
 function saveCategory() {
@@ -161,7 +156,6 @@ function saveCategory() {
     };
 
     categories.push(newCategory);
-
     localStorage.setItem('categories', JSON.stringify(categories));
 
     alert('Category saved successfully!');
