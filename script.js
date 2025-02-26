@@ -1,124 +1,156 @@
-let categories = {};
-let currentCategory = '';
-let quizWords = [];
-let currentIndex = 0;
-let correctCount = 0;
-let withAnswers = true;
+let categories = []; // Will store categories from Local Storage or default
 
-async function loadCategories() {
-  try {
-    const response = await fetch('categories.json');
-    categories = await response.json();
-  } catch (error) {
-    alert('Error loading categories. Make sure categories.json is available.');
-  }
+// Load categories from Local Storage when the app starts
+window.addEventListener('load', () => {
+    const savedCategories = localStorage.getItem('categories');
+    if (savedCategories) {
+        categories = JSON.parse(savedCategories);
+    }
+    showCategoryList();
+});
+
+let currentCategory;
+let currentQuestionIndex = 0;
+let score = 0;
+let showAnswers = false;
+
+document.getElementById('start-quiz').addEventListener('click', () => {
+    showCategoryList();
+});
+
+document.getElementById('add-category').addEventListener('click', () => {
+    showAddCategoryScreen();
+});
+
+document.getElementById('save-category').addEventListener('click', () => {
+    saveCategory();
+});
+
+document.getElementById('submit-answer').addEventListener('click', () => {
+    submitAnswer();
+});
+
+document.getElementById('reset').addEventListener('click', () => {
+    reset();
+});
+
+// Display categories in the list
+function showCategoryList() {
+    document.getElementById('main-menu').style.display = 'block';
+    document.getElementById('category-list').innerHTML = categories.map(category => 
+        `<div class="category-item" onclick="startQuiz('${category.name}')">${category.name}</div>`
+    ).join('');
 }
 
-function showCategoryMenu() {
-  toggleMenu('category-menu');
-  const list = document.getElementById('category-list');
-  list.innerHTML = '';
-  Object.keys(categories).forEach(category => {
-    const li = document.createElement('li');
-    li.textContent = category;
-    li.onclick = () => selectCategory(category);
-    list.appendChild(li);
-  });
+// Start the quiz with the selected category
+function startQuiz(categoryName) {
+    currentCategory = categories.find(c => c.name === categoryName);
+    currentQuestionIndex = 0;
+    score = 0;
+    
+    // Ask user to choose quiz mode
+    showAnswers = confirm("Do you want to see correct answers during the quiz?");
+    
+    showQuizScreen();
 }
 
-function filterCategories() {
-  const search = document.getElementById('category-search').value.toLowerCase();
-  document.querySelectorAll('#category-list li').forEach(item => {
-    item.style.display = item.textContent.toLowerCase().includes(search) ? '' : 'none';
-  });
+function showQuizScreen() {
+    document.getElementById('main-menu').style.display = 'none';
+    document.getElementById('quiz-screen').style.display = 'block';
+    document.getElementById('feedback').innerText = '';
+    document.getElementById('question').innerText = getNextQuestion();
 }
 
-function selectCategory(category) {
-  currentCategory = category;
-  const words = categories[category];
-  quizWords = shuffle([
-    ...words.map(w => ({ question: w.english, answer: w.arabic, direction: 'enToAr' })),
-    ...words.map(w => ({ question: w.arabic, answer: w.english, direction: 'arToEn' }))
-  ]);
-  document.getElementById('quiz-category').textContent = `Category: ${category}`;
-  returnToMainMenu();
-}
+function getNextQuestion() {
+    if (currentQuestionIndex >= currentCategory.words.length) {
+        showResultsScreen();
+        return '';
+    }
 
-function startQuiz(showAnswers) {
-  if (!currentCategory) return alert('Please select a category first.');
-  withAnswers = showAnswers;
-  currentIndex = 0;
-  correctCount = 0;
-  toggleMenu('quiz-container');
-  showQuestion();
-}
+    // Randomly decide whether to show English or Arabic
+    const question = currentCategory.words[currentQuestionIndex];
+    const showEnglish = Math.random() < 0.5;
 
-function showQuestion() {
-  const { question, direction } = quizWords[currentIndex];
-  document.getElementById('quiz-question').textContent = direction === 'enToAr' ? `Translate to Arabic: ${question}` : `Translate to English: ${question}`;
-  document.getElementById('quiz-answer').value = '';
-  document.getElementById('quiz-feedback').textContent = '';
-  document.getElementById('quiz-answer').focus();
+    if (showEnglish) {
+        question.current = question.english;
+        question.correct = question.arabic;
+    } else {
+        question.current = question.arabic;
+        question.correct = question.english;
+    }
+    
+    currentQuestionIndex++;
+    return question.current;
 }
 
 function submitAnswer() {
-  const answer = document.getElementById('quiz-answer').value.trim();
-  const { answer: correctAnswer } = quizWords[currentIndex];
-  const feedback = document.getElementById('quiz-feedback');
+    const answer = document.getElementById('answer').value.trim();
+    const currentQuestion = currentCategory.words[currentQuestionIndex - 1];
+    
+    if (answer.toLowerCase() === currentQuestion.correct.toLowerCase()) {
+        score++;
+        document.getElementById('feedback').innerText = 'Correct!';
+    } else {
+        if (showAnswers) {
+            document.getElementById('feedback').innerText = `Incorrect! Correct answer: ${currentQuestion.correct}`;
+        } else {
+            document.getElementById('feedback').innerText = 'Incorrect!';
+        }
+    }
 
-  if (answer.toLowerCase() === correctAnswer.toLowerCase()) {
-    correctCount++;
-    feedback.textContent = 'Correct!';
-    feedback.style.color = 'green';
-  } else {
-    feedback.textContent = withAnswers ? `Incorrect! Correct: ${correctAnswer}` : 'Incorrect!';
-    feedback.style.color = 'red';
-  }
-
-  currentIndex++;
-  setTimeout(() => {
-    currentIndex < quizWords.length ? showQuestion() : showResults();
-  }, 1000);
+    document.getElementById('question').innerText = getNextQuestion();
+    document.getElementById('answer').value = ''; // Clear the answer input
 }
 
-function showResults() {
-  document.getElementById('quiz-score').textContent = `Score: ${correctCount} / ${quizWords.length}`;
-  toggleMenu('result-container');
+function showResultsScreen() {
+    document.getElementById('quiz-screen').style.display = 'none';
+    document.getElementById('results-screen').style.display = 'block';
+    document.getElementById('score').innerText = `You scored ${score}/${currentCategory.words.length}`;
 }
 
-function showAddCategory() {
-  toggleMenu('add-category-menu');
+function reset() {
+    document.getElementById('results-screen').style.display = 'none';
+    document.getElementById('main-menu').style.display = 'block';
 }
 
+// Show the Add Category screen
+function showAddCategoryScreen() {
+    document.getElementById('main-menu').style.display = 'none';
+    document.getElementById('add-category-screen').style.display = 'block';
+    document.querySelector('#category-table tbody').innerHTML = `
+        <tr>
+            <td><input type="text" placeholder="English" /></td>
+            <td><input type="text" placeholder="Arabic" /></td>
+        </tr>
+    `;
+}
+
+// Save new category to Local Storage
 function saveCategory() {
-  const name = document.getElementById('new-category-name').value.trim();
-  const englishWords = document.getElementById('english-words').value.trim().split('\n');
-  const arabicWords = document.getElementById('arabic-words').value.trim().split('\n');
+    const categoryName = document.getElementById('category-name').value;
+    const words = [];
+    const rows = document.querySelectorAll('#category-table tbody tr');
 
-  if (!name || englishWords.length !== arabicWords.length) {
-    return alert('Please enter a valid category name and equal number of words.');
-  }
+    rows.forEach(row => {
+        const english = row.cells[0].querySelector('input').value;
+        const arabic = row.cells[1].querySelector('input').value;
+        if (english && arabic) {
+            words.push({ english, arabic });
+        }
+    });
 
-  categories[name] = englishWords.map((eng, i) => ({ english: eng, arabic: arabicWords[i] }));
-  alert('Category saved!');
-  returnToMainMenu();
+    const newCategory = {
+        name: categoryName,
+        words: words
+    };
+
+    categories.push(newCategory);
+
+    // Save to Local Storage
+    localStorage.setItem('categories', JSON.stringify(categories));
+
+    alert('Category saved successfully!');
+    document.getElementById('add-category-screen').style.display = 'none';
+    document.getElementById('main-menu').style.display = 'block';
+    showCategoryList();
 }
-
-function returnToMainMenu() {
-  toggleMenu('main-menu');
-}
-
-function toggleMenu(menuId) {
-  document.querySelectorAll('.menu').forEach(menu => menu.classList.add('hidden'));
-  document.getElementById(menuId).classList.remove('hidden');
-}
-
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
-window.onload = loadCategories;
