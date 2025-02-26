@@ -1,10 +1,32 @@
-let categories = []; // Will store categories from Local Storage or default
+let categories = []; // To store categories
 
-// Load categories from Local Storage when the app starts
+// Embedded JSON data (instead of fetching from file)
+const defaultCategories = [
+    {
+        "name": "Basic Words",
+        "words": [
+            { "english": "Hello", "arabic": "مرحبا" },
+            { "english": "Goodbye", "arabic": "وداعا" }
+        ]
+    },
+    {
+        "name": "Numbers",
+        "words": [
+            { "english": "One", "arabic": "واحد" },
+            { "english": "Two", "arabic": "اثنين" }
+        ]
+    }
+];
+
+// Load categories when the app starts
 window.addEventListener('load', () => {
     const savedCategories = localStorage.getItem('categories');
     if (savedCategories) {
         categories = JSON.parse(savedCategories);
+    } else {
+        // Use embedded JSON data if Local Storage is empty
+        categories = defaultCategories;
+        localStorage.setItem('categories', JSON.stringify(categories));
     }
     showCategoryList();
 });
@@ -34,7 +56,6 @@ document.getElementById('reset').addEventListener('click', () => {
     reset();
 });
 
-// Display categories in the list
 function showCategoryList() {
     document.getElementById('main-menu').style.display = 'block';
     document.getElementById('category-list').innerHTML = categories.map(category => 
@@ -42,13 +63,11 @@ function showCategoryList() {
     ).join('');
 }
 
-// Start the quiz with the selected category
 function startQuiz(categoryName) {
     currentCategory = categories.find(c => c.name === categoryName);
     currentQuestionIndex = 0;
     score = 0;
     
-    // Ask user to choose quiz mode
     showAnswers = confirm("Do you want to see correct answers during the quiz?");
     
     showQuizScreen();
@@ -67,7 +86,6 @@ function getNextQuestion() {
         return '';
     }
 
-    // Randomly decide whether to show English or Arabic
     const question = currentCategory.words[currentQuestionIndex];
     const showEnglish = Math.random() < 0.5;
 
@@ -99,7 +117,7 @@ function submitAnswer() {
     }
 
     document.getElementById('question').innerText = getNextQuestion();
-    document.getElementById('answer').value = ''; // Clear the answer input
+    document.getElementById('answer').value = '';
 }
 
 function showResultsScreen() {
@@ -113,7 +131,6 @@ function reset() {
     document.getElementById('main-menu').style.display = 'block';
 }
 
-// Show the Add Category screen
 function showAddCategoryScreen() {
     document.getElementById('main-menu').style.display = 'none';
     document.getElementById('add-category-screen').style.display = 'block';
@@ -125,7 +142,6 @@ function showAddCategoryScreen() {
     `;
 }
 
-// Save new category to Local Storage
 function saveCategory() {
     const categoryName = document.getElementById('category-name').value;
     const words = [];
@@ -146,7 +162,6 @@ function saveCategory() {
 
     categories.push(newCategory);
 
-    // Save to Local Storage
     localStorage.setItem('categories', JSON.stringify(categories));
 
     alert('Category saved successfully!');
