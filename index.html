@@ -7,46 +7,56 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="main-menu">
+    <header>
+        <button id="toggle-menu">☰ Categories</button>
         <h1>Vocabulary Quiz</h1>
-        <button id="start-quiz">Start Quiz</button>
-        <button id="add-category">Add Category</button>
+    </header>
+    
+    <nav id="categories-menu" style="display: none;">
+        <input type="text" id="category-search" placeholder="Search categories...">
         <div id="category-list"></div>
-    </div>
+    </nav>
 
-    <div id="quiz-screen" style="display: none;">
-        <h2>Quiz</h2>
-        <div id="question"></div>
-        <input type="text" id="answer" placeholder="Your answer...">
-        <button id="submit-answer">Submit Answer</button>
-        <div id="feedback"></div>
-    </div>
+    <main>
+        <div id="main-menu">
+            <button id="start-quiz">Start Quiz</button>
+            <button id="add-category">Add Category</button>
+        </div>
 
-    <div id="results-screen" style="display: none;">
-        <h2>Results</h2>
-        <div id="score"></div>
-        <button id="reset">Main Menu</button>
-    </div>
+        <div id="quiz-screen" style="display: none;">
+            <h2>Quiz</h2>
+            <div id="question"></div>
+            <input type="text" id="answer" placeholder="Your answer...">
+            <button id="submit-answer">Submit Answer</button>
+            <div id="feedback"></div>
+        </div>
 
-    <div id="add-category-screen" style="display: none;">
-        <h2>Add New Category</h2>
-        <input type="text" id="category-name" placeholder="Category Name">
-        <table id="category-table">
-            <thead>
-                <tr>
-                    <th>English</th>
-                    <th>Arabic</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><input type="text" placeholder="English"></td>
-                    <td><input type="text" placeholder="Arabic"></td>
-                </tr>
-            </tbody>
-        </table>
-        <button id="save-category">Save Category</button>
-    </div>
+        <div id="results-screen" style="display: none;">
+            <h2>Results</h2>
+            <div id="score"></div>
+            <button id="reset">Main Menu</button>
+        </div>
+
+        <div id="add-category-screen" style="display: none;">
+            <h2>Add New Category</h2>
+            <input type="text" id="category-name" placeholder="Category Name">
+            <table id="category-table">
+                <thead>
+                    <tr>
+                        <th>English</th>
+                        <th>Arabic</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" placeholder="English"></td>
+                        <td><input type="text" placeholder="Arabic"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button id="save-category">Save Category</button>
+        </div>
+    </main>
 
     <script src="app.js"></script>
 </body>
