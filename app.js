@@ -1,6 +1,5 @@
-let categories = []; // To store categories
+let categories = [];
 
-// Embedded JSON data (instead of fetching from file)
 const defaultCategories = [
     {
         "name": "Basic Words",
@@ -18,13 +17,12 @@ const defaultCategories = [
     }
 ];
 
-// Load categories when the app starts
+// Load categories on start
 window.addEventListener('load', () => {
     const savedCategories = localStorage.getItem('categories');
     if (savedCategories) {
         categories = JSON.parse(savedCategories);
     } else {
-        // Use embedded JSON data if Local Storage is empty
         categories = defaultCategories;
         localStorage.setItem('categories', JSON.stringify(categories));
     }
@@ -32,17 +30,19 @@ window.addEventListener('load', () => {
 });
 
 let currentCategory;
+let questions = [];
 let currentQuestionIndex = 0;
 let score = 0;
 let showAnswers = false;
 
 document.getElementById('start-quiz').addEventListener('click', () => {
-    showCategoryList();
     document.getElementById('main-menu').style.display = 'none';
+    document.getElementById('categories-menu').style.display = 'block';
 });
 
 document.getElementById('add-category').addEventListener('click', () => {
-    showAddCategoryScreen();
+    document.getElementById('main-menu').style.display = 'none';
+    document.getElementById('add-category-screen').style.display = 'block';
 });
 
 document.getElementById('save-category').addEventListener('click', () => {
@@ -57,18 +57,36 @@ document.getElementById('reset').addEventListener('click', () => {
     reset();
 });
 
+document.getElementById('toggle-menu').addEventListener('click', () => {
+    const menu = document.getElementById('categories-menu');
+    menu.style.display = (menu.style.display === 'none') ? 'block' : 'none';
+});
+
+document.getElementById('category-search').addEventListener('input', () => {
+    showCategoryList();
+});
+
 function showCategoryList() {
-    document.getElementById('main-menu').style.display = 'block';
-    document.getElementById('category-list').innerHTML = categories.map(category => 
-        `<div class="category-item" onclick="startQuiz('${category.name}')">${category.name}</div>`
-    ).join('');
+    const searchTerm = document.getElementById('category-search').value.toLowerCase();
+    document.getElementById('category-list').innerHTML = categories
+        .filter(category => category.name.toLowerCase().includes(searchTerm))
+        .map(category => `<div class="category-item" onclick="startQuiz('${category.name}')">${category.name}</div>`)
+        .join('');
 }
 
 function startQuiz(categoryName) {
     currentCategory = categories.find(c => c.name === categoryName);
+    questions = [];
+
+    currentCategory.words.forEach(word => {
+        questions.push({ question: word.english, answer: word.arabic });
+        questions.push({ question: word.arabic, answer: word.english });
+    });
+
+    questions = questions.sort(() => Math.random() - 0.5);
+
     currentQuestionIndex = 0;
     score = 0;
-    
     showAnswers = confirm("Do you want to see correct answers during the quiz?");
     
     showQuizScreen();
@@ -76,90 +94,44 @@ function startQuiz(categoryName) {
 
 function showQuizScreen() {
     document.getElementById('main-menu').style.display = 'none';
+    document.getElementById('categories-menu').style.display = 'none';
     document.getElementById('quiz-screen').style.display = 'block';
     document.getElementById('feedback').innerText = '';
-    document.getElementById('question').innerText = getNextQuestion();
-}
-
-function getNextQuestion() {
-    if (currentQuestionIndex >= currentCategory.words.length) {
-        showResultsScreen();
-        return '';
-    }
-
-    const question = currentCategory.words[currentQuestionIndex];
-    const showEnglish = Math.random() < 0.5;
-
-    if (showEnglish) {
-        question.current = question.english;
-        question.correct = question.arabic;
-    } else {
-        question.current = question.arabic;
-        question.correct = question.english;
-    }
-    
-    currentQuestionIndex++;
-    return question.current;
+    document.getElementById('question').innerText = questions[currentQuestionIndex].question;
 }
 
 function submitAnswer() {
     const answer = document.getElementById('answer').value.trim();
-    const currentQuestion = currentCategory.words[currentQuestionIndex - 1];
-    
-    if (answer.toLowerCase() === currentQuestion.correct.toLowerCase()) {
+    const currentQuestion = questions[currentQuestionIndex];
+
+    if (answer.toLowerCase() === currentQuestion.answer.toLowerCase()) {
         score++;
         document.getElementById('feedback').innerText = 'Correct!';
     } else {
         if (showAnswers) {
-            document.getElementById('feedback').innerText = `Incorrect! Correct answer: ${currentQuestion.correct}`;
+            document.getElementById('feedback').innerText = `Incorrect! Correct answer: ${currentQuestion.answer}`;
         } else {
             document.getElementById('feedback').innerText = 'Incorrect!';
         }
     }
 
-    document.getElementById('question').innerText = getNextQuestion();
-    document.getElementById('answer').value = '';
+    currentQuestionIndex++;
+
+    if (currentQuestionIndex < questions.length) {
+        document.getElementById('question').innerText = questions[currentQuestionIndex].question;
+        document.getElementById('answer').value = '';
+    } else {
+        showResultsScreen();
+    }
 }
 
 function showResultsScreen() {
     document.getElementById('quiz-screen').style.display = 'none';
     document.getElementById('results-screen').style.display = 'block';
-    document.getElementById('score').innerText = `You scored ${score}/${currentCategory.words.length}`;
+    document.getElementById('score').innerText = `You scored ${score}/${questions.length}`;
 }
 
 function reset() {
     document.getElementById('results-screen').style.display = 'none';
     document.getElementById('main-menu').style.display = 'block';
-}
-
-function showAddCategoryScreen() {
-    document.getElementById('main-menu').style.display = 'none';
-    document.getElementById('add-category-screen').style.display = 'block';
-}
-
-function saveCategory() {
-    const categoryName = document.getElementById('category-name').value;
-    const words = [];
-    const rows = document.querySelectorAll('#category-table tbody tr');
-
-    rows.forEach(row => {
-        const english = row.cells[0].querySelector('input').value;
-        const arabic = row.cells[1].querySelector('input').value;
-        if (english && arabic) {
-            words.push({ english, arabic });
-        }
-    });
-
-    const newCategory = {
-        name: categoryName,
-        words: words
-    };
-
-    categories.push(newCategory);
-    localStorage.setItem('categories', JSON.stringify(categories));
-
-    alert('Category saved successfully!');
-    document.getElementById('add-category-screen').style.display = 'none';
-    document.getElementById('main-menu').style.display = 'block';
-    showCategoryList();
 }
