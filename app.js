@@ -42,6 +42,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.getElementById('save-category').addEventListener('click', saveCategory);
+    document.getElementById('save-edit').addEventListener('click', saveEdit);
+    document.getElementById('delete-category').addEventListener('click', deleteCategory);
+    document.getElementById('cancel-edit').addEventListener('click', cancelEdit);
 
     document.getElementById('submit-answer').addEventListener('click', submitAnswer);
 
@@ -59,7 +62,12 @@ function showCategoryList() {
     const searchTerm = document.getElementById('category-search').value.toLowerCase();
     document.getElementById('category-list').innerHTML = categories
         .filter(category => category.name.toLowerCase().includes(searchTerm))
-        .map(category => `<div class="category-item" onclick="startQuiz('${category.name}')">${category.name}</div>`)
+        .map(category => `
+            <div class="category-item">
+                <span onclick="startQuiz('${category.name}')">${category.name}</span>
+                <button onclick="editCategory('${category.name}')">Edit</button>
+            </div>
+        `)
         .join('');
 }
 
@@ -145,4 +153,40 @@ function saveCategory() {
     } else {
         alert('Please enter a category name and at least one valid word pair.');
     }
+}
+
+function editCategory(name) {
+    const category = categories.find(c => c.name === name);
+    document.getElementById('edit-category-name').value = category.name;
+    document.getElementById('edit-word-pairs').value = category.words.map(w => `${w.english}, ${w.arabic}`).join('\n');
+    document.getElementById('main-menu').style.display = 'none';
+    document.getElementById('edit-category-screen').style.display = 'block';
+    currentCategory = category;
+}
+
+function saveEdit() {
+    currentCategory.name = document.getElementById('edit-category-name').value.trim();
+    currentCategory.words = document.getElementById('edit-word-pairs').value.trim().split('\n').map(line => {
+        const [english, arabic] = line.split(',');
+        return { english: english.trim(), arabic: arabic.trim() };
+    });
+    localStorage.setItem('categories', JSON.stringify(categories));
+    alert('Changes saved!');
+    document.getElementById('edit-category-screen').style.display = 'none';
+    document.getElementById('main-menu').style.display = 'block';
+    showCategoryList();
+}
+
+function deleteCategory() {
+    categories = categories.filter(c => c !== currentCategory);
+    localStorage.setItem('categories', JSON.stringify(categories));
+    alert('Category deleted!');
+    document.getElementById('edit-category-screen').style.display = 'none';
+    document.getElementById('main-menu').style.display = 'block';
+    showCategoryList();
+}
+
+function cancelEdit() {
+    document.getElementById('edit-category-screen').style.display = 'none';
+    document.getElementById('main-menu').style.display = 'block';
 }
