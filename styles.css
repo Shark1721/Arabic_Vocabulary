@@ -1,50 +1,52 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f5f0fa;
-    color: #4a4a4a;
+    background: #f0e6f6;
+    color: #333;
+    text-align: center;
+    padding: 20px;
+}
+
+h1, h2 {
+    color: #6a0dad;
+}
+
+button {
+    background: #d896ff;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 10px;
+    box-shadow: 2px 2px 4px #aaa;
+}
+
+button:hover {
+    background: #c07bfd;
+}
+
+.word-inputs {
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-  }
-.menu {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 400px;
-    text-align: center;
-  }
-.hidden { display: none; }
-button {
-    background-color: #d19fe8;
-    border: none;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 12px;
-    cursor: pointer;
-    margin: 10px 0;
-    width: 100%;
-  }
-button:hover { background-color: #b576c4; }
-input, textarea {
-    width: 100%;
+    gap: 20px;
+}
+
+textarea {
+    width: 40%;
+    height: 150px;
     padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
     border-radius: 8px;
-  }
-.columns { display: flex; gap: 10px; }
-.columns textarea { width: 50%; height: 150px; }
-ul { list-style: none; padding: 0; }
-li {
-    padding: 8px;
-    background-color: #ece0f6;
+    border: 1px solid #ddd;
+    resize: vertical;
+    font-size: 16px;
+}
+
+input[type="text"] {
+    width: 80%;
+    padding: 10px;
     border-radius: 8px;
-    margin-bottom: 6px;
-    cursor: pointer;
-  }
-li:hover { background-color: #d5c1eb; }
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
