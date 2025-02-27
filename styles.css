@@ -1,52 +1,61 @@
 body {
     font-family: Arial, sans-serif;
-    background: #f0e6f6;
-    color: #333;
+    background-color: #f5e6ff;
+    color: #4a004a;
     text-align: center;
-    padding: 20px;
+    padding: 10px;
 }
 
-h1, h2 {
-    color: #6a0dad;
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #d1b3ff;
+    border-radius: 10px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 24px;
 }
 
 button {
-    background: #d896ff;
+    background-color: #9b59b6;
+    color: white;
     border: none;
     padding: 10px 20px;
-    color: white;
-    font-size: 16px;
-    border-radius: 8px;
+    border-radius: 5px;
     cursor: pointer;
-    margin: 10px;
-    box-shadow: 2px 2px 4px #aaa;
+    margin: 5px;
 }
 
 button:hover {
-    background: #c07bfd;
+    background-color: #8e44ad;
 }
 
-.word-inputs {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
+#categories-menu {
+    background-color: #e6ccff;
+    border: 1px solid #b399ff;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px 0;
+    text-align: left;
+}
+
+.category-item {
+    cursor: pointer;
+    padding: 5px;
+    margin: 3px 0;
+    border-radius: 5px;
+}
+
+.category-item:hover {
+    background-color: #d9b3ff;
 }
 
 textarea {
-    width: 40%;
-    height: 150px;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    resize: vertical;
-    font-size: 16px;
-}
-
-input[type="text"] {
     width: 80%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    margin-bottom: 20px;
-    font-size: 16px;
+    height: 100px;
+    margin: 10px 0;
 }
