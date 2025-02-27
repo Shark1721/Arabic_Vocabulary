@@ -144,24 +144,32 @@ function saveCategory() {
     const arabicLines = document.getElementById('arabic-words').value.trim().split('\n');
     const words = [];
 
-    // Pair each line in English with the corresponding line in Arabic
+    // Loop through the English lines and pair with Arabic lines
     englishLines.forEach((eng, index) => {
         const arabic = arabicLines[index] || '';
-        if (eng && arabic) {
+        
+        // Only save if both lines are not empty
+        if (eng.trim() && arabic.trim()) {
             words.push({ english: eng.trim(), arabic: arabic.trim() });
         }
     });
 
+    // Ensure category name and at least one word pair exist
     if (categoryName && words.length > 0) {
         const newCategory = {
             name: categoryName,
             words: words
         };
 
+        // Add to categories and save to localStorage
         categories.push(newCategory);
         localStorage.setItem('categories', JSON.stringify(categories));
 
         alert('Category saved successfully!');
+        document.getElementById('category-name').value = '';
+        document.getElementById('english-words').value = '';
+        document.getElementById('arabic-words').value = '';
+        
         document.getElementById('add-category-screen').style.display = 'none';
         document.getElementById('main-menu').style.display = 'block';
         showCategoryList();
@@ -169,3 +177,4 @@ function saveCategory() {
         alert('Please enter a category name and at least one pair of words.');
     }
 }
+
