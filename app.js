@@ -36,11 +36,6 @@ let score = 0;
 let showAnswers = false;
 
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('start-quiz').addEventListener('click', () => {
-        document.getElementById('main-menu').style.display = 'none';
-        document.getElementById('categories-menu').style.display = 'block';
-    });
-
     document.getElementById('add-category').addEventListener('click', () => {
         document.getElementById('main-menu').style.display = 'none';
         document.getElementById('add-category-screen').style.display = 'block';
@@ -122,4 +117,21 @@ function showResultsScreen() {
 function reset() {
     document.getElementById('results-screen').style.display = 'none';
     document.getElementById('main-menu').style.display = 'block';
+}
+
+function saveCategory() {
+    const categoryName = document.getElementById('category-name').value.trim();
+    const englishLines = document.getElementById('english-words').value.trim().split('\n');
+    const arabicLines = document.getElementById('arabic-words').value.trim().split('\n');
+    const words = [];
+
+    for (let i = 0; i < Math.min(englishLines.length, arabicLines.length); i++) {
+        words.push({ english: englishLines[i], arabic: arabicLines[i] });
+    }
+
+    categories.push({ name: categoryName, words });
+    localStorage.setItem('categories', JSON.stringify(categories));
+    alert('Category saved!');
+    document.getElementById('add-category-screen').style.display = 'none';
+    showCategoryList();
 }
