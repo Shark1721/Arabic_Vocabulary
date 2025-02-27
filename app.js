@@ -121,17 +121,28 @@ function reset() {
 
 function saveCategory() {
     const categoryName = document.getElementById('category-name').value.trim();
-    const englishLines = document.getElementById('english-words').value.trim().split('\n');
-    const arabicLines = document.getElementById('arabic-words').value.trim().split('\n');
+    const wordPairs = document.getElementById('word-pairs').value.trim().split('\n');
     const words = [];
 
-    for (let i = 0; i < Math.min(englishLines.length, arabicLines.length); i++) {
-        words.push({ english: englishLines[i], arabic: arabicLines[i] });
-    }
+    wordPairs.forEach(pair => {
+        const parts = pair.split(',');
+        if (parts.length === 2) {
+            const english = parts[0].trim();
+            const arabic = parts[1].trim();
+            if (english && arabic) {
+                words.push({ english: english, arabic: arabic });
+            }
+        }
+    });
 
-    categories.push({ name: categoryName, words });
-    localStorage.setItem('categories', JSON.stringify(categories));
-    alert('Category saved!');
-    document.getElementById('add-category-screen').style.display = 'none';
-    showCategoryList();
+    if (categoryName && words.length > 0) {
+        categories.push({ name: categoryName, words });
+        localStorage.setItem('categories', JSON.stringify(categories));
+        alert('Category saved!');
+        document.getElementById('add-category-screen').style.display = 'none';
+        document.getElementById('main-menu').style.display = 'block';
+        showCategoryList();
+    } else {
+        alert('Please enter a category name and at least one valid word pair.');
+    }
 }
