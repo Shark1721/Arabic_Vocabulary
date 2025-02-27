@@ -19,7 +19,7 @@
 
     <main>
         <div id="main-menu">
-            <button id="start-quiz">Start Quiz</button>
+            <button id="start-quiz">Choose Category</button>
             <button id="add-category">Add Category</button>
         </div>
 
@@ -40,20 +40,8 @@
         <div id="add-category-screen" style="display: none;">
             <h2>Add New Category</h2>
             <input type="text" id="category-name" placeholder="Category Name">
-            <table id="category-table">
-                <thead>
-                    <tr>
-                        <th>English</th>
-                        <th>Arabic</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input type="text" placeholder="English"></td>
-                        <td><input type="text" placeholder="Arabic"></td>
-                    </tr>
-                </tbody>
-            </table>
+            <textarea id="english-words" placeholder="English Words (one per line)"></textarea>
+            <textarea id="arabic-words" placeholder="Arabic Words (one per line)"></textarea>
             <button id="save-category">Save Category</button>
         </div>
     </main>
