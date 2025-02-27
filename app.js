@@ -135,3 +135,35 @@ function reset() {
     document.getElementById('results-screen').style.display = 'none';
     document.getElementById('main-menu').style.display = 'block';
 }
+function saveCategory() {
+    const categoryName = document.getElementById('category-name').value.trim();
+    const englishLines = document.getElementById('english-words').value.trim().split('\n');
+    const arabicLines = document.getElementById('arabic-words').value.trim().split('\n');
+    const words = [];
+
+    // Pair each line in English with the corresponding line in Arabic
+    englishLines.forEach((eng, index) => {
+        const arabic = arabicLines[index] || '';
+        if (eng && arabic) {
+            words.push({ english: eng.trim(), arabic: arabic.trim() });
+        }
+    });
+
+    if (categoryName && words.length > 0) {
+        const newCategory = {
+            name: categoryName,
+            words: words
+        };
+
+        categories.push(newCategory);
+        localStorage.setItem('categories', JSON.stringify(categories));
+
+        alert('Category saved successfully!');
+        document.getElementById('add-category-screen').style.display = 'none';
+        document.getElementById('main-menu').style.display = 'block';
+        showCategoryList();
+    } else {
+        alert('Please enter a category name and at least one pair of words.');
+    }
+}
+
