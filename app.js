@@ -78,11 +78,13 @@ function startQuiz(categoryName) {
     currentCategory = categories.find(c => c.name === categoryName);
     questions = [];
 
+    // Pair each word twice: English → Arabic and Arabic → English
     currentCategory.words.forEach(word => {
         questions.push({ question: word.english, answer: word.arabic });
         questions.push({ question: word.arabic, answer: word.english });
     });
 
+    // Randomize order
     questions = questions.sort(() => Math.random() - 0.5);
 
     currentQuestionIndex = 0;
@@ -135,6 +137,7 @@ function reset() {
     document.getElementById('results-screen').style.display = 'none';
     document.getElementById('main-menu').style.display = 'block';
 }
+
 function saveCategory() {
     const categoryName = document.getElementById('category-name').value.trim();
     const englishLines = document.getElementById('english-words').value.trim().split('\n');
@@ -166,4 +169,3 @@ function saveCategory() {
         alert('Please enter a category name and at least one pair of words.');
     }
 }
-
