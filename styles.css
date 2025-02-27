@@ -18,7 +18,8 @@ header {
 h1 {
     margin: 0;
     font-size: 24px;
-    padding-left:60px;
+    padding-left: 300px;
+    padding-right: 300px;
 }
 
 button {
@@ -29,6 +30,7 @@ button {
     border-radius: 5px;
     cursor: pointer;
     margin: 5px;
+    float: right;
 }
 
 button:hover {
@@ -59,4 +61,7 @@ textarea {
     width: 80%;
     height: 100px;
     margin: 10px 0;
+}
+#toggle-menu {
+    float:left;
 }
