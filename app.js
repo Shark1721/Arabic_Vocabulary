@@ -140,38 +140,54 @@ function reset() {
 
 function saveCategory() {
     const categoryName = document.getElementById('category-name').value.trim();
-    const englishLines = document.getElementById('english-words').value.trim().split('\n');
-    const arabicLines = document.getElementById('arabic-words').value.trim().split('\n');
+    const englishInput = document.getElementById('english-words').value.trim();
+    const arabicInput = document.getElementById('arabic-words').value.trim();
     const words = [];
 
-    // Loop through the longer list to pair all lines
-    const maxLength = Math.max(englishLines.length, arabicLines.length);
+    // Split input into lines
+    const englishLines = englishInput.split('\n');
+    const arabicLines = arabicInput.split('\n');
 
-    for (let i = 0; i < maxLength; i++) {
-        const eng = englishLines[i] ? englishLines[i].trim() : '';
-        const arabic = arabicLines[i] ? arabicLines[i].trim() : '';
+    // Debugging: Log the inputs to see the split lines
+    console.log('English Lines:', englishLines);
+    console.log('Arabic Lines:', arabicLines);
 
-        // Only save non-empty pairs
+    // Pair each line from English with the corresponding Arabic line
+    for (let i = 0; i < Math.min(englishLines.length, arabicLines.length); i++) {
+        const eng = englishLines[i].trim();
+        const arabic = arabicLines[i].trim();
+
+        // Only add if both lines are non-empty
         if (eng && arabic) {
             words.push({ english: eng, arabic: arabic });
         }
     }
 
+    // Check if category name and at least one word pair exist
     if (categoryName && words.length > 0) {
         const newCategory = {
             name: categoryName,
             words: words
         };
 
-        // Update categories and save to localStorage
+        // Add new category to existing categories
         categories.push(newCategory);
+        
+        // Save to localStorage
         localStorage.setItem('categories', JSON.stringify(categories));
 
+        // Debugging: Confirm the new category is saved
+        console.log('New Category:', newCategory);
+        console.log('All Categories:', categories);
+
         alert('Category saved successfully!');
+
+        // Clear inputs after saving
         document.getElementById('category-name').value = '';
         document.getElementById('english-words').value = '';
         document.getElementById('arabic-words').value = '';
-        
+
+        // Go back to main menu and update category list
         document.getElementById('add-category-screen').style.display = 'none';
         document.getElementById('main-menu').style.display = 'block';
         showCategoryList();
@@ -179,6 +195,7 @@ function saveCategory() {
         alert('Please enter a category name and at least one pair of words.');
     }
 }
+
 
 
 
