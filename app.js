@@ -181,27 +181,3 @@ function saveCategory() {
 }
 
 
-    // Ensure category name and at least one word pair exist
-    if (categoryName && words.length > 0) {
-        const newCategory = {
-            name: categoryName,
-            words: words
-        };
-
-        // Add to categories and save to localStorage
-        categories.push(newCategory);
-        localStorage.setItem('categories', JSON.stringify(categories));
-
-        alert('Category saved successfully!');
-        document.getElementById('category-name').value = '';
-        document.getElementById('english-words').value = '';
-        document.getElementById('arabic-words').value = '';
-        
-        document.getElementById('add-category-screen').style.display = 'none';
-        document.getElementById('main-menu').style.display = 'block';
-        showCategoryList();
-    } else {
-        alert('Please enter a category name and at least one pair of words.');
-    }
-}
-
